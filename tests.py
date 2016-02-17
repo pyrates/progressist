@@ -19,44 +19,39 @@ def call(bar):
 
 
 def test_default():
-    """Default bar."""
-    bar = Bar(total=20)
+    bar = Bar(total=20, prefix="Default:")
     call(bar)
 
 
 def test_custom_done_char():
-    """Custom fill character."""
-    bar = Bar(total=20, done_char='█')
+    bar = Bar(total=20, done_char='█', prefix="Custom fill character:")
     call(bar)
 
 
 def test_custom_remain_char():
     """Custom empty fill character."""
-    bar = Bar(total=20, done_char='◉', remain_char='◯')
+    bar = Bar(total=20, done_char='◉', remain_char='◯',
+              prefix="Custom empty fill char:")
     call(bar)
 
 
 def test_with_eta():
-    """Display ETA."""
-    bar = Bar(total=20, template='{prefix} {progress} {eta}')
+    bar = Bar(total=20, template='With ETA: {progress} ETA: {eta}')
     call(bar)
 
 
 def test_with_avg():
-    """Display avg."""
-    bar = Bar(total=20, template='{prefix} {progress} Avg: {avg} loop/s')
+    bar = Bar(total=20, template='With Average: {progress} Avg: {avg} loop/s')
     call(bar)
 
 
 def test_with_custom_color():
-    """Custom color."""
     bar = Bar(total=20,
-              template="\r\033[34m{prefix} {progress} {percent}\033[39m")
+              template="\r\033[34mCustom color: {progress} {percent}\033[39m")
     call(bar)
 
 
 def test_with_custom_class():
-    """Using a custom class to add custom info"""
 
     class MyBar(Bar):
 
@@ -66,12 +61,13 @@ def test_with_custom_class():
                 return "psutil not installed"
             return psutil.swap_memory().total
 
-    bar = MyBar(total=20, template='{prefix} {progress} Swap: {swap}')
+    bar = MyBar(total=20,
+                template='Custom class with custom info: '
+                         '{progress} Swap: {swap}')
     call(bar)
 
 
 def test_spinner():
-    """Using a custom class to create a spinner"""
 
     class MyBar(Bar):
         steps = ('-', '\\', '|', '/')
@@ -81,7 +77,7 @@ def test_spinner():
             step = self.done % len(self.steps)
             return self.steps[step]
 
-    bar = MyBar(total=20)
+    bar = MyBar(total=20, prefix="Custom class with spinner")
     call(bar)
 
 
@@ -89,5 +85,4 @@ if __name__ == '__main__':
 
     for name, func in globals().copy().items():
         if name.startswith('test_'):
-            print(func.__doc__)
             func()
