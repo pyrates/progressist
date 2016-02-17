@@ -56,7 +56,7 @@ def test_with_custom_color():
 
 
 def test_with_custom_class():
-    """Using a custom class with custom method to get current swap"""
+    """Using a custom class to add custom info"""
 
     class MyBar(Bar):
 

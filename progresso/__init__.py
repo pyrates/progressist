@@ -49,7 +49,11 @@ class Bar:
 
     @property
     def eta(self):
-        return datetime.now() + self.lasting
+        d = datetime.now() + self.lasting
+        tpl = '{:%H:%M:%S}'
+        if self.lasting.days:
+            tpl = '{:%Y-%m-%d %H:%M:%S}'
+        return tpl.format(d)
 
     @property
     def avg(self):
