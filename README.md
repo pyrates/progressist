@@ -55,7 +55,8 @@ examples.
 | ----- | ------ | ------------- |
 | done_char | `=` | Char used for filling the progress bar |
 | remain_char | `' '` (a space) | Char used for filling the empty portion of the progress bar |
-| template | `\r{prefix} {progress} {percent} ({done}/{total})` | The template of the whole line |
+| template | `{prefix} {progress} {percent} ({done}/{total})` | The template of the whole line |
+| prefix | `Progress:` | The leading label |
 
 
 ## Available widgets
