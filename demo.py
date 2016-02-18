@@ -1,3 +1,4 @@
+import sys
 import time
 
 try:
@@ -73,6 +74,14 @@ def demo_spinner():
     call(bar)
 
 
+def demo_spinner_without_total():
+
+    bar = Bar(progress='{spinner}',
+              template='Spinner without total: {progress} '
+                       'Elapsed: {elapsed}')
+    call(bar)
+
+
 def demo_reverse_bar():
 
     class MyBar(Bar):
@@ -90,6 +99,9 @@ def demo_reverse_bar():
 
 if __name__ == '__main__':
 
-    for name, func in globals().copy().items():
-        if name.startswith('demo_'):
-            func()
+    if len(sys.argv) == 2:
+        globals()[sys.argv[1]]()
+    else:
+        for name, func in globals().copy().items():
+            if name.startswith('demo_'):
+                func()

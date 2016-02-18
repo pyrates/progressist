@@ -81,6 +81,27 @@ def test_spinner(bar, capsys):
     assert out == '\rBar: - 4/100'
 
 
+def test_spinner_without_total(bar, capsys):
+    bar.total = 0
+    bar.progress = '{spinner}'
+    bar.template = '\rSpinner: {progress}'
+    bar.render()
+    out, err = capsys.readouterr()
+    assert out == '\rSpinner: -'
+    bar.update()
+    out, err = capsys.readouterr()
+    assert out == '\rSpinner: \\'
+    bar.update()
+    out, err = capsys.readouterr()
+    assert out == '\rSpinner: |'
+    bar.update()
+    out, err = capsys.readouterr()
+    assert out == '\rSpinner: /'
+    bar.update()
+    out, err = capsys.readouterr()
+    assert out == '\rSpinner: -'
+
+
 def test_custom_spinner_steps(bar, capsys):
     bar.steps = ['#', '*']
     bar.progress = '{spinner}'

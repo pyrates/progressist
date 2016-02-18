@@ -81,9 +81,12 @@ class Bar:
         sys.stdout.write(line.format_map(self))
 
         if self.fraction == 1.0:
-            sys.stdout.write('\n')
+            self.finish()
+        else:
+            sys.stdout.flush()
 
-        sys.stdout.flush()
+    def finish(self):
+        sys.stdout.write('\n')
 
     def __call__(self, **kwargs):
         self.update(**kwargs)
@@ -105,6 +108,9 @@ class Bar:
         for i in iterable:
             yield i
             self.update()
+        if self.fraction != 1.0:
+            # Spinner without total.
+            self.finish()
 
 
 class Percent(float):
