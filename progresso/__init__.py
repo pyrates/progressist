@@ -1,10 +1,7 @@
 from datetime import datetime, timedelta
-import re
 import shutil
 import sys
 import time
-
-VARS = re.compile('\{(.*?)\}')
 
 
 class Bar:
@@ -21,13 +18,18 @@ class Bar:
         self.start = None
         for key, value in kwargs.items():
             setattr(self, key, value)
-        self.widgets = VARS.findall(self.template)
-        self.widgets.remove('progress')
         if not self.template.startswith('\r'):
             self.template = '\r' + self.template
 
     def compute_columns(self):
         return shutil.get_terminal_size((80, 20)).columns
+
+    def keys(self):
+        return [k for k in dir(self)
+                if not k.startswith('_') and not k == "progress"]
+
+    def __getitem__(self, item):
+        return getattr(self, item, '')
 
     @property
     def progress(self):
@@ -66,8 +68,7 @@ class Bar:
         self.raw_avg = self.raw_elapsed / self.done
         self.remaining_time = self.remaining * self.raw_avg
 
-        data = {name: getattr(self, name) for name in self.widgets}
-        line = self.template.format(progress='{}', **data)
+        line = self.template.format(progress='{}', **self)
 
         self.length = self.columns - len(line) - 2
 
