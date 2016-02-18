@@ -9,15 +9,14 @@ class Bar:
     prefix = 'Progress:'
     done_char = '='
     remain_char = ' '
+    template = '\r{prefix} {progress} {percent:.1%} ({done}/{total})'
+    done = 0
+    start = None
 
     def __init__(self, total=None, **kwargs):
         self.columns = self.compute_columns()
         self.total = total
-        self.template = '\r{prefix} {progress} {percent:.1%} ({done}/{total})'
-        self.done = 0
-        self.start = None
-        for key, value in kwargs.items():
-            setattr(self, key, value)
+        self.__dict__.update(kwargs)
         if not self.template.startswith('\r'):
             self.template = '\r' + self.template
 
