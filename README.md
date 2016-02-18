@@ -57,7 +57,15 @@ You can add more widgets by subclassing it:
 
     bar = MyBar(total=20, template='{prefix} {progress} Swap usage: {swap}')
 
-See [tests](https://github.com/yohanboniface/progresso/blob/poc/tests.py) for more
+You want to compute yourself the done part?
+
+    bar.update(done=myvar / othervar * another)
+
+Or the target total may change during process?
+
+    bar.update(total=newcomputedtotal)
+
+See [demo](https://github.com/yohanboniface/progresso/blob/master/demo.py) for more
 examples.
 
 

@@ -11,14 +11,14 @@ class Bar:
     remain_char = ' '
     template = '{prefix} {progress} {percent:.1%} ({done}/{total})'
     done = 0
+    total = 0
     start = None
     steps = ('-', '\\', '|', '/')
     progress = '{bar}'
     invisible_chars = 1  # "\r"
 
-    def __init__(self, total=None, **kwargs):
+    def __init__(self, **kwargs):
         self.columns = self.compute_columns()
-        self.total = total
         self.__dict__.update(kwargs)
         if not self.template.startswith('\r'):
             self.template = '\r' + self.template
@@ -67,7 +67,7 @@ class Bar:
 
     def render(self):
         self.remaining = self.total - self.done
-        self.fraction = min(self.done / self.total, 1.0)
+        self.fraction = min(self.done / self.total, 1.0) if self.total else 0
         self.raw_elapsed = time.time() - self.start
         self.raw_avg = self.raw_elapsed / self.done if self.done else 0
         self.remaining_time = self.remaining * self.raw_avg
@@ -88,13 +88,13 @@ class Bar:
     def __call__(self, **kwargs):
         self.update(**kwargs)
 
-    def update(self, step=1, done=None):
+    def update(self, step=1, **kwargs):
         if self.start is None:
             self.start = time.time()
-        if done is not None:
-            self.done = done
-        else:
+        if step:
             self.done += step
+        # Allow to override any properties.
+        self.__dict__.update(kwargs)
 
         self.render()
 
