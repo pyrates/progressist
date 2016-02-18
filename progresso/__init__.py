@@ -13,7 +13,7 @@ class Bar:
     def __init__(self, total=None, **kwargs):
         self.columns = self.compute_columns()
         self.total = total
-        self.template = '\r{prefix} {progress} {percent} ({done}/{total})'
+        self.template = '\r{prefix} {progress} {percent:.1%} ({done}/{total})'
         self.done = 0
         self.start = None
         for key, value in kwargs.items():
@@ -39,7 +39,7 @@ class Bar:
 
     @property
     def percent(self):
-        return '{}%'.format(str(int(self.fraction * 1000) / 10))
+        return self.fraction
 
     @property
     def lasting(self):
@@ -51,11 +51,7 @@ class Bar:
 
     @property
     def eta(self):
-        d = datetime.now() + self.lasting
-        tpl = '{:%H:%M:%S}'
-        if self.lasting.days:
-            tpl = '{:%Y-%m-%d %H:%M:%S}'
-        return tpl.format(d)
+        return datetime.now() + self.lasting
 
     @property
     def avg(self):

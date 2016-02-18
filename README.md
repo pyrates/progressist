@@ -35,6 +35,12 @@ You can change the whole template:
 
     bar = Bar(total=mytotalstuff, template='{prefix} {progress} ETA: {eta}')
 
+It's just plain [python formatting](https://docs.python.org/3.4/library/string.html#formatspec)
+so you can use any valid string formatting to take control over the appearance.
+For example:
+
+    bar = Bar(total=mytotalstuff, template='{progress} {percent:.2%} ETA: {eta:%H:%M:%S}')
+
 You can add more widgets by subclassing it:
 
     class MyBar(Bar):

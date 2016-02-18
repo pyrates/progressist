@@ -36,7 +36,7 @@ def test_custom_remain_char():
 
 
 def test_with_eta():
-    bar = Bar(total=20, template='With ETA: {progress} ETA: {eta}')
+    bar = Bar(total=20, template='With ETA: {progress} ETA: {eta:%H:%M:%S}')
     call(bar)
 
 
