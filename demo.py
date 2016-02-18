@@ -79,8 +79,8 @@ def demo_reverse_bar():
 
         @property
         def bar(self):
-            done_chars = int(self.fraction * self.length)
-            remain_chars = self.length - done_chars
+            done_chars = int(self.fraction * self.free_space)
+            remain_chars = self.free_space - done_chars
             return (self.remain_char * remain_chars
                     + self.done_char * done_chars)
 

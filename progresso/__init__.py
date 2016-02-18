@@ -35,12 +35,12 @@ class Bar:
     @property
     def spinner(self):
         step = self.done % len(self.steps)
-        return self.steps[step]
+        return self.steps[int(step)]
 
     @property
     def bar(self):
-        done_chars = int(self.fraction * self.length)
-        remain_chars = self.length - done_chars
+        done_chars = int(self.fraction * self.free_space)
+        remain_chars = self.free_space - done_chars
         return self.done_char * done_chars + self.remain_char * remain_chars
 
     @property
@@ -48,7 +48,8 @@ class Bar:
         return self.fraction
 
     @property
-    def lasting(self):
+    def tta(self):
+        """Time to arrival."""
         return timedelta(seconds=self.remaining_time)
 
     @property
@@ -57,24 +58,27 @@ class Bar:
 
     @property
     def eta(self):
-        return datetime.now() + self.lasting
+        """Estimated time of arrival."""
+        return datetime.now() + self.tta
 
     @property
     def avg(self):
         return round(self.raw_avg, 1)
 
-    def _update(self):
+    def render(self):
         self.remaining = self.total - self.done
         self.fraction = min(self.done / self.total, 1.0)
         self.raw_elapsed = time.time() - self.start
-        self.raw_avg = self.raw_elapsed / self.done
+        self.raw_avg = self.raw_elapsed / self.done if self.done else 0
         self.remaining_time = self.remaining * self.raw_avg
 
-        line = self.template.format(**self)
+        # format_map(self) instead of format(**self) to prevent all properties
+        # to be evaluated, even ones not needed for the current template.
+        line = self.template.format_map(self)
 
-        self.length = (self.columns - len(line) + len(self.progress)
-                       + self.invisible_chars)
-        sys.stdout.write(line.format(**self))
+        self.free_space = (self.columns - len(line) + len(self.progress)
+                           + self.invisible_chars)
+        sys.stdout.write(line.format_map(self))
 
         if self.fraction == 1.0:
             sys.stdout.write('\n')
@@ -92,12 +96,12 @@ class Bar:
         else:
             self.done += step
 
-        self._update()
+        self.render()
 
     def __next__(self):
         self.update()
 
     def iter(self, iterable):
         for i in iterable:
-            self.update()
             yield i
+            self.update()

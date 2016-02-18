@@ -78,7 +78,7 @@ name     | description   | type |
 | ------ | ------------- | ------ |
 prefix   | Leading label in default template | string
 eta      | The computed ETA | datetime
-lasting  | The lasting time | timedelta
+tta      | The estimated remaining time (time to arrival) | timedelta
 avg      | The average iteration per second | float
 done     | The number of done iterations | integer
 total    | The total number of iterations to be done | integer
