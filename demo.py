@@ -84,7 +84,7 @@ def demo_reverse_bar():
             return (self.remain_char * remain_chars
                     + self.done_char * done_chars)
 
-    bar = MyBar(total=20, template="{percent:.1%} {progress} Reverse bar")
+    bar = MyBar(total=20, template="{percent} {progress} Reverse bar")
     call(bar)
 
 

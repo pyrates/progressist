@@ -51,15 +51,15 @@ def test_custom_remain_char(bar, capsys):
 
 
 def test_percent(bar, capsys):
-    bar.template = '\r{prefix} {progress} {percent:.1%}'
+    bar.template = '\r{prefix} {progress} {percent}'
     bar.done = 50
     bar.render()
     out, err = capsys.readouterr()
-    assert out == '\rBar: ===================                     50.0%'
-    bar.done = 78.21
+    assert out == '\rBar: ===================                    50.00%'
+    bar.done = 78.2134
     bar.render()
     out, err = capsys.readouterr()
-    assert out == '\rBar: ==============================          78.2%'
+    assert out == '\rBar: =============================          78.21%'
 
 
 def test_spinner(bar, capsys):

@@ -82,15 +82,15 @@ examples.
 
 ## Available widgets
 
-name     | description   | type |
-| ------ | ------------- | ------ |
-prefix   | Leading label in default template | string
-eta      | The computed ETA | datetime
-tta      | The estimated remaining time (time to arrival) | timedelta
-avg      | The average iteration per second | float
-done     | The number of done iterations | integer
-total    | The total number of iterations to be done | integer
-remaing  | The number of iterations remaining to be done | integer
-percent  | The percent of iterations already done | float
-elapsed  | The elapsed time from the first iteration | timetuple
-progress | The actual progress bar | template string (`{bar}` or `{spinner}`)
+name     | description   | type | default formatting
+| ------ | ------------- | ------ | ---------------- |
+prefix   | Leading label in default template | string | str
+eta      | The computed ETA | datetime |
+tta      | The estimated remaining time (time to arrival) | timedelta |
+avg      | The average iteration per second | float |
+done     | The number of done iterations | integer |
+total    | The total number of iterations to be done | integer |
+remaing  | The number of iterations remaining to be done | integer |
+percent  | The percent of iterations already done | float | `.2%`
+elapsed  | The elapsed time from the first iteration | timetuple |
+progress | The actual progress bar | template string (`{bar}` or `{spinner}`) |

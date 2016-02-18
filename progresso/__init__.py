@@ -9,7 +9,7 @@ class Bar:
     prefix = 'Progress:'
     done_char = '='
     remain_char = ' '
-    template = '{prefix} {progress} {percent:.1%} ({done}/{total})'
+    template = '{prefix} {progress} {percent} ({done}/{total})'
     done = 0
     total = 0
     start = None
@@ -45,7 +45,7 @@ class Bar:
 
     @property
     def percent(self):
-        return self.fraction
+        return Percent(self.fraction)
 
     @property
     def tta(self):
@@ -105,3 +105,11 @@ class Bar:
         for i in iterable:
             yield i
             self.update()
+
+
+class Percent(float):
+
+    def __format__(self, format_spec):
+        if not format_spec:
+            format_spec = '.2%'
+        return super().__format__(format_spec)
