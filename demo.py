@@ -18,40 +18,40 @@ def call(bar):
         continue
 
 
-def test_default():
+def demo_default():
     bar = Bar(total=20, prefix="Default:")
     call(bar)
 
 
-def test_custom_done_char():
+def demo_custom_done_char():
     bar = Bar(total=20, done_char='█', prefix="Custom fill character:")
     call(bar)
 
 
-def test_custom_remain_char():
+def demo_custom_remain_char():
     """Custom empty fill character."""
     bar = Bar(total=20, done_char='◉', remain_char='◯',
               prefix="Custom empty fill char:")
     call(bar)
 
 
-def test_with_eta():
+def demo_with_eta():
     bar = Bar(total=20, template='With ETA: {progress} ETA: {eta:%H:%M:%S}')
     call(bar)
 
 
-def test_with_avg():
+def demo_with_avg():
     bar = Bar(total=20, template='With Average: {progress} Avg: {avg} loop/s')
     call(bar)
 
 
-def test_with_custom_color():
-    bar = Bar(total=20, remain_char='-',
+def demo_with_custom_color():
+    bar = Bar(total=20, remain_char='-', invisible_chars=11,
               template="\r\033[34mCustom color: {progress}\033[39m")
     call(bar)
 
 
-def test_with_custom_class():
+def demo_with_custom_class():
 
     class MyBar(Bar):
 
@@ -67,13 +67,13 @@ def test_with_custom_class():
     call(bar)
 
 
-def test_spinner():
+def demo_spinner():
 
     bar = Bar(total=20, prefix="Spinner", progress='{spinner}')
     call(bar)
 
 
-def test_reverse_bar():
+def demo_reverse_bar():
 
     class MyBar(Bar):
 
@@ -91,5 +91,5 @@ def test_reverse_bar():
 if __name__ == '__main__':
 
     for name, func in globals().copy().items():
-        if name.startswith('test_'):
+        if name.startswith('demo_'):
             func()

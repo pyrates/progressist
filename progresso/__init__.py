@@ -14,6 +14,7 @@ class Bar:
     start = None
     steps = ('-', '\\', '|', '/')
     progress = '{bar}'
+    invisible_chars = 1  # "\r"
 
     def __init__(self, total=None, **kwargs):
         self.columns = self.compute_columns()
@@ -71,7 +72,8 @@ class Bar:
 
         line = self.template.format(**self)
 
-        self.length = self.columns - len(line) - len(self.progress)
+        self.length = (self.columns - len(line) + len(self.progress)
+                       + self.invisible_chars)
         sys.stdout.write(line.format(**self))
 
         if self.fraction == 1.0:
