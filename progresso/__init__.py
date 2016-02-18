@@ -9,9 +9,11 @@ class Bar:
     prefix = 'Progress:'
     done_char = '='
     remain_char = ' '
-    template = '\r{prefix} {progress} {percent:.1%} ({done}/{total})'
+    template = '{prefix} {progress} {percent:.1%} ({done}/{total})'
     done = 0
     start = None
+    steps = ('-', '\\', '|', '/')
+    progress = '{bar}'
 
     def __init__(self, total=None, **kwargs):
         self.columns = self.compute_columns()
@@ -24,14 +26,18 @@ class Bar:
         return shutil.get_terminal_size((80, 20)).columns
 
     def keys(self):
-        return [k for k in dir(self)
-                if not k.startswith('_') and not k == "progress"]
+        return [k for k in dir(self) if not k.startswith('_')]
 
     def __getitem__(self, item):
         return getattr(self, item, '')
 
     @property
-    def progress(self):
+    def spinner(self):
+        step = self.done % len(self.steps)
+        return self.steps[step]
+
+    @property
+    def bar(self):
         done_chars = int(self.fraction * self.length)
         remain_chars = self.length - done_chars
         return self.done_char * done_chars + self.remain_char * remain_chars
@@ -63,11 +69,10 @@ class Bar:
         self.raw_avg = self.raw_elapsed / self.done
         self.remaining_time = self.remaining * self.raw_avg
 
-        line = self.template.format(progress='{}', **self)
+        line = self.template.format(**self)
 
-        self.length = self.columns - len(line) - 2
-
-        sys.stdout.write(line.format(self.progress))
+        self.length = self.columns - len(line) - len(self.progress)
+        sys.stdout.write(line.format(**self))
 
         if self.fraction == 1.0:
             sys.stdout.write('\n')

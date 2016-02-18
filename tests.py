@@ -69,15 +69,22 @@ def test_with_custom_class():
 
 def test_spinner():
 
+    bar = Bar(total=20, prefix="Spinner", progress='{spinner}')
+    call(bar)
+
+
+def test_reverse_bar():
+
     class MyBar(Bar):
-        steps = ('-', '\\', '|', '/')
 
         @property
-        def progress(self):
-            step = self.done % len(self.steps)
-            return self.steps[step]
+        def bar(self):
+            done_chars = int(self.fraction * self.length)
+            remain_chars = self.length - done_chars
+            return (self.remain_char * remain_chars
+                    + self.done_char * done_chars)
 
-    bar = MyBar(total=20, prefix="Custom class with spinner")
+    bar = MyBar(total=20, template="{percent:.1%} {progress} Reverse bar")
     call(bar)
 
 
