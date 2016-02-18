@@ -41,6 +41,12 @@ For example:
 
     bar = Bar(total=mytotalstuff, template='{progress} {percent:.2%} ETA: {eta:%H:%M:%S}')
 
+You can change the progress logic itself, for example to use a spinner (included):
+
+    bar = Bar(total=mytotalstuff, progress='{spinner}')
+    # 'progress' kwarg must return a valid template variable.
+    # included ones are {bar} and {spinner}
+
 You can add more widgets by subclassing it:
 
     class MyBar(Bar):
@@ -63,19 +69,20 @@ examples.
 | remain_char | `' '` (a space) | Char used for filling the empty portion of the progress bar |
 | template | `{prefix} {progress} {percent} ({done}/{total})` | The template of the whole line |
 | prefix | `Progress:` | The leading label |
+| progress | '{bar}' | The actual widget used for progress, can be `{bar}` or `{spinner}`
 
 
 ## Available widgets
 
-name     | description
-| ------ | ------------- |
-prefix   | Leading label in default template
-progress | The actual progress bar
-eta      | The computed ETA
-lasting  | The lasting time
-avg      | The average iteration per second
-done     | The number of done iterations
-total    | The total number of iterations to be done
-remaing  | The number of iterations remaining to be done
-percent  | The percent of iterations already done
-elapsed  | The elapsed time from the first iteration
+name     | description   | type |
+| ------ | ------------- | ------ |
+prefix   | Leading label in default template | string
+eta      | The computed ETA | datetime
+lasting  | The lasting time | timedelta
+avg      | The average iteration per second | float
+done     | The number of done iterations | integer
+total    | The total number of iterations to be done | integer
+remaing  | The number of iterations remaining to be done | integer
+percent  | The percent of iterations already done | float
+elapsed  | The elapsed time from the first iteration | timetuple
+progress | The actual progress bar | template string (`{bar}` or `{spinner}`)

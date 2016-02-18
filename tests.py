@@ -46,8 +46,8 @@ def test_with_avg():
 
 
 def test_with_custom_color():
-    bar = Bar(total=20,
-              template="\r\033[34mCustom color: {progress} {percent}\033[39m")
+    bar = Bar(total=20, remain_char='-',
+              template="\r\033[34mCustom color: {progress}\033[39m")
     call(bar)
 
 
