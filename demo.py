@@ -42,7 +42,7 @@ def demo_with_eta():
 
 
 def demo_with_avg():
-    bar = Bar(total=20, template='With Average: {progress} Avg: {avg} loop/s')
+    bar = Bar(total=20, template='With Average: {progress} Avg: {avg} s/item')
     call(bar)
 
 

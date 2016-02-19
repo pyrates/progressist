@@ -1,3 +1,6 @@
+import time
+
+
 def test_default(bar, capsys):
     bar.update(done=37)
     out, err = capsys.readouterr()
@@ -60,6 +63,40 @@ def test_percent(bar, capsys):
     bar.render()
     out, err = capsys.readouterr()
     assert out == '\rBar: =============================          78.21%'
+
+
+def test_can_override_percent_formatting(bar, capsys):
+    bar.template = '\r{prefix} {progress} {percent:.1%}'
+    bar.done = 50
+    bar.render()
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ===================                     50.0%'
+    bar.done = 78.2134
+    bar.render()
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ==============================          78.2%'
+
+
+def test_avg(bar, capsys):
+    bar.template = '\r{prefix} {progress} {avg}/s'
+    bar.start = time.time() - 25
+    bar.done = 50
+    bar.render()
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ===================                    0.50/s'
+    bar.done = 43
+    bar.render()
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ================                       0.58/s'
+
+
+def test_can_override_avg_formatting(bar, capsys):
+    bar.template = '\r{prefix} {progress} {avg:.1f}/s'
+    bar.start = time.time() - 25
+    bar.done = 50
+    bar.render()
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ===================                     0.5/s'
 
 
 def test_spinner(bar, capsys):

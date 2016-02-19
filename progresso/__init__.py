@@ -64,8 +64,8 @@ class Bar:
 
     @property
     def avg(self):
-        """Average iterations by second."""
-        return round(self.raw_avg, 1)
+        """Average time per iteration, in seconds."""
+        return Float(self.raw_avg)
 
     def render(self):
         self.remaining = self.total - self.done
@@ -117,6 +117,14 @@ class Bar:
 
 # Manage sane default formats while keeping the original type to allow any
 # built-in formatting syntax.
+
+class Float(float):
+
+    def __format__(self, format_spec):
+        if not format_spec:
+            format_spec = '.2f'
+        return super().__format__(format_spec)
+
 
 class Percent(float):
 
