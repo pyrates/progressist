@@ -50,12 +50,12 @@ class Bar:
     @property
     def tta(self):
         """Time to arrival."""
-        return timedelta(seconds=self.remaining_time)
+        return Timedelta(seconds=self.remaining_time)
 
     @property
     def elapsed(self):
         """Elasped time from the start."""
-        return timedelta(seconds=self.raw_elapsed, microseconds=0)
+        return Timedelta(seconds=self.raw_elapsed)
 
     @property
     def eta(self):
@@ -155,3 +155,14 @@ class ETA(datetime):
         # Find a more elegant way.
         return cls(year=dt.year, month=dt.month, day=dt.day, hour=dt.hour,
                    minute=dt.minute, second=dt.second, tzinfo=dt.tzinfo)
+
+
+class Timedelta(timedelta):
+
+    def __new__(cls, **kwargs):
+        tmp = timedelta(**kwargs)
+        # Filter out microseconds from str format.
+        # timedelta does not have a __format__ method, and we don't want to
+        # recode it (we would need to handle i18n of "days").
+        obj = timedelta(days=tmp.days, seconds=tmp.seconds)
+        return obj

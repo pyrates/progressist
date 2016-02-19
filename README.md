@@ -85,13 +85,13 @@ examples.
 name     | description   | type | default formatting
 | ------ | ------------- | ------ | ---------------- |
 prefix   | Leading label in default template | string | str
+elapsed  | The elapsed time from the first iteration | timedelta | not formattable
 eta      | The computed ETA | datetime | `%H:%M:%S` if less than 24 hours, else `%Y-%m-%d %H:%M:%S`
-tta      | The estimated remaining time (time to arrival) | timedelta |
+tta      | The estimated remaining time (time to arrival) | timedelta | not formattable
 avg      | The average time per iteration, in seconds | float | `.2f`
 speed    | The average number of iterations per second | float | `.2f`
 done     | The number of done iterations | integer |
 total    | The total number of iterations to be done | integer |
 remaing  | The number of iterations remaining to be done | integer |
 percent  | The percent of iterations already done | float | `.2%`
-elapsed  | The elapsed time from the first iteration | timetuple |
 progress | The actual progress bar | template string (`{bar}` or `{spinner}`) |
