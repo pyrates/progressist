@@ -99,6 +99,28 @@ def test_can_override_avg_formatting(bar, capsys):
     assert out == '\rBar: ===================                     0.5/s'
 
 
+def test_speed(bar, capsys):
+    bar.template = '\r{prefix} {progress} {speed} loop/s'
+    bar.start = time.time() - 25
+    bar.done = 50
+    bar.render()
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ================                  2.00 loop/s'
+    bar.done = 89
+    bar.render()
+    out, err = capsys.readouterr()
+    assert out == '\rBar: =============================     3.56 loop/s'
+
+
+def test_can_override_speed_formatting(bar, capsys):
+    bar.template = '\r{prefix} {progress} {speed:.1f} loop/s'
+    bar.start = time.time() - 25
+    bar.done = 50
+    bar.render()
+    out, err = capsys.readouterr()
+    assert out == '\rBar: =================                  2.0 loop/s'
+
+
 def test_spinner(bar, capsys):
     bar.progress = '{spinner}'
     bar.render()

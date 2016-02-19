@@ -67,6 +67,11 @@ class Bar:
         """Average time per iteration, in seconds."""
         return Float(self.raw_avg)
 
+    @property
+    def speed(self):
+        """Number of iterations per second."""
+        return Float(1.0 / self.raw_avg)
+
     def render(self):
         self.remaining = self.total - self.done
         self.fraction = min(self.done / self.total, 1.0) if self.total else 0
