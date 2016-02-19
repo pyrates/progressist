@@ -47,7 +47,7 @@ You can change the progress logic itself, for example to use a spinner (included
     # 'progress' kwarg must return a valid template variable.
     # included ones are {bar} and {spinner}
 
-You can add more widgets by subclassing it:
+You can add more template vars by subclassing `Bar`:
 
     class MyBar(Bar):
 
@@ -80,7 +80,7 @@ examples.
 | progress | '{bar}' | The actual widget used for progress, can be `{bar}` or `{spinner}`
 
 
-## Available widgets
+## Built in template vars
 
 name     | description   | type | default formatting
 | ------ | ------------- | ------ | ---------------- |
