@@ -37,7 +37,7 @@ def demo_custom_remain_char():
 
 
 def demo_with_eta():
-    bar = Bar(total=20, template='With ETA: {progress} ETA: {eta:%H:%M:%S}')
+    bar = Bar(total=20, template='With ETA: {progress} ETA: {eta}')
     call(bar)
 
 

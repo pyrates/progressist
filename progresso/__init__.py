@@ -54,15 +54,17 @@ class Bar:
 
     @property
     def elapsed(self):
+        """Elasped time from the start."""
         return timedelta(seconds=self.raw_elapsed, microseconds=0)
 
     @property
     def eta(self):
         """Estimated time of arrival."""
-        return datetime.now() + self.tta
+        return ETA.from_datetime(datetime.now() + self.tta)
 
     @property
     def avg(self):
+        """Average iterations by second."""
         return round(self.raw_avg, 1)
 
     def render(self):
@@ -73,7 +75,7 @@ class Bar:
         self.remaining_time = self.remaining * self.raw_avg
 
         # format_map(self) instead of format(**self) to prevent all properties
-        # to be evaluated, even ones not needed for the current template.
+        # to be evaluated, even ones not needed for the given template.
         line = self.template.format_map(self)
 
         self.free_space = (self.columns - len(line) + len(self.progress)
@@ -113,9 +115,30 @@ class Bar:
             self.finish()
 
 
+# Manage sane default formats while keeping the original type to allow any
+# built-in formatting syntax.
+
 class Percent(float):
 
     def __format__(self, format_spec):
         if not format_spec:
             format_spec = '.2%'
         return super().__format__(format_spec)
+
+
+class ETA(datetime):
+
+    def __format__(self, format_spec):
+        if not format_spec:
+            now = datetime.now()
+            diff = self - now
+            format_spec = '%H:%M:%S'
+            if diff.days > 1:
+                format_spec = '%Y-%m-%d %H:%M:%S'
+        return super().__format__(format_spec)
+
+    @classmethod
+    def from_datetime(cls, dt):
+        # Find a more elegant way.
+        return cls(year=dt.year, month=dt.month, day=dt.day, hour=dt.hour,
+                   minute=dt.minute, second=dt.second, tzinfo=dt.tzinfo)

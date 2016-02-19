@@ -86,7 +86,7 @@ name     | description   | type | default formatting
 | ------ | ------------- | ------ | ---------------- |
 prefix   | Leading label in default template | string | str
 eta      | The computed ETA | datetime |
-tta      | The estimated remaining time (time to arrival) | timedelta |
+tta      | The estimated remaining time (time to arrival) | timedelta | `%H:%M:%S` if less than 24 hours, else `%Y-%m-%d %H:%M:%S`
 avg      | The average iteration per second | float |
 done     | The number of done iterations | integer |
 total    | The total number of iterations to be done | integer |
