@@ -9,12 +9,12 @@ class Bar:
     prefix = 'Progress:'
     done_char = '='
     remain_char = ' '
-    template = '{prefix} {progress} {percent} ({done}/{total})'
+    template = '{prefix} {animation} {percent} ({done}/{total})'
     done = 0
     total = 0
     start = None
     steps = ('-', '\\', '|', '/')
-    progress = '{bar}'
+    animation = '{progress}'
     invisible_chars = 1  # "\r"
 
     def __init__(self, **kwargs):
@@ -38,10 +38,20 @@ class Bar:
         return self.steps[int(step)]
 
     @property
-    def bar(self):
+    def progress(self):
+        if not self.free_space:
+            return ''
         done_chars = int(self.fraction * self.free_space)
         remain_chars = self.free_space - done_chars
         return self.done_char * done_chars + self.remain_char * remain_chars
+
+    @property
+    def stream(self):
+        chars = []
+        for i in range(self.free_space):
+            idx = (self.done + i) % len(self.steps)
+            chars.append(self.steps[idx])
+        return ''.join(chars)
 
     @property
     def percent(self):
@@ -73,6 +83,7 @@ class Bar:
         return Float(1.0 / self.raw_avg)
 
     def render(self):
+        self.free_space = ''
         self.remaining = self.total - self.done
         self.fraction = min(self.done / self.total, 1.0) if self.total else 0
         self.raw_elapsed = time.time() - self.start
@@ -83,7 +94,7 @@ class Bar:
         # to be evaluated, even ones not needed for the given template.
         line = self.template.format_map(self)
 
-        self.free_space = (self.columns - len(line) + len(self.progress)
+        self.free_space = (self.columns - len(line) + len(self.animation)
                            + self.invisible_chars)
         sys.stdout.write(line.format_map(self))
 

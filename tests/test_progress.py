@@ -54,7 +54,7 @@ def test_custom_remain_char(bar, capsys):
 
 
 def test_percent(bar, capsys):
-    bar.template = '\r{prefix} {progress} {percent}'
+    bar.template = '\r{prefix} {animation} {percent}'
     bar.done = 50
     bar.render()
     out, err = capsys.readouterr()
@@ -66,7 +66,7 @@ def test_percent(bar, capsys):
 
 
 def test_can_override_percent_formatting(bar, capsys):
-    bar.template = '\r{prefix} {progress} {percent:.1%}'
+    bar.template = '\r{prefix} {animation} {percent:.1%}'
     bar.done = 50
     bar.render()
     out, err = capsys.readouterr()
@@ -78,7 +78,7 @@ def test_can_override_percent_formatting(bar, capsys):
 
 
 def test_avg(bar, capsys):
-    bar.template = '\r{prefix} {progress} {avg}/s'
+    bar.template = '\r{prefix} {animation} {avg}/s'
     bar.start = time.time() - 25
     bar.done = 50
     bar.render()
@@ -91,7 +91,7 @@ def test_avg(bar, capsys):
 
 
 def test_can_override_avg_formatting(bar, capsys):
-    bar.template = '\r{prefix} {progress} {avg:.1f}/s'
+    bar.template = '\r{prefix} {animation} {avg:.1f}/s'
     bar.start = time.time() - 25
     bar.done = 50
     bar.render()
@@ -100,7 +100,7 @@ def test_can_override_avg_formatting(bar, capsys):
 
 
 def test_speed(bar, capsys):
-    bar.template = '\r{prefix} {progress} {speed} loop/s'
+    bar.template = '\r{prefix} {animation} {speed} loop/s'
     bar.start = time.time() - 25
     bar.done = 50
     bar.render()
@@ -113,7 +113,7 @@ def test_speed(bar, capsys):
 
 
 def test_can_override_speed_formatting(bar, capsys):
-    bar.template = '\r{prefix} {progress} {speed:.1f} loop/s'
+    bar.template = '\r{prefix} {animation} {speed:.1f} loop/s'
     bar.start = time.time() - 25
     bar.done = 50
     bar.render()
@@ -122,7 +122,7 @@ def test_can_override_speed_formatting(bar, capsys):
 
 
 def test_spinner(bar, capsys):
-    bar.progress = '{spinner}'
+    bar.animation = '{spinner}'
     bar.render()
     out, err = capsys.readouterr()
     assert out == '\rBar: - 0/100'
@@ -142,8 +142,8 @@ def test_spinner(bar, capsys):
 
 def test_spinner_without_total(bar, capsys):
     bar.total = 0
-    bar.progress = '{spinner}'
-    bar.template = '\rSpinner: {progress}'
+    bar.animation = '{spinner}'
+    bar.template = '\rSpinner: {animation}'
     bar.render()
     out, err = capsys.readouterr()
     assert out == '\rSpinner: -'
@@ -163,7 +163,7 @@ def test_spinner_without_total(bar, capsys):
 
 def test_custom_spinner_steps(bar, capsys):
     bar.steps = ['#', '*']
-    bar.progress = '{spinner}'
+    bar.animation = '{spinner}'
     bar.render()
     out, err = capsys.readouterr()
     assert out == '\rBar: # 0/100'

@@ -37,18 +37,18 @@ def demo_custom_remain_char():
 
 
 def demo_with_eta():
-    bar = Bar(total=20, template='With ETA: {progress} ETA: {eta}')
+    bar = Bar(total=20, template='With ETA: {animation} ETA: {eta}')
     call(bar)
 
 
 def demo_with_avg():
-    bar = Bar(total=20, template='With Average: {progress} Avg: {avg} s/item')
+    bar = Bar(total=20, template='With Average: {animation} Avg: {avg} s/item')
     call(bar)
 
 
 def demo_with_custom_color():
     bar = Bar(total=20, remain_char='-', invisible_chars=11,
-              template="\r\033[34mCustom color: {progress}\033[39m")
+              template="\r\033[34mCustom color: {animation}\033[39m")
     call(bar)
 
 
@@ -64,20 +64,28 @@ def demo_with_custom_class():
 
     bar = MyBar(total=20,
                 template='Custom class with custom info: '
-                         '{progress} Swap: {swap}')
+                         '{animation} Swap: {swap}')
+    call(bar)
+
+
+def demo_stream():
+
+    bar = Bar(total=20, animation='{stream}', steps=['⎻', '⎼'],
+              template='Stream {animation} {elapsed}')
     call(bar)
 
 
 def demo_spinner():
 
-    bar = Bar(total=20, prefix="Spinner", progress='{spinner}')
+    bar = Bar(total=20, prefix="Spinner", animation='{spinner}')
     call(bar)
 
 
 def demo_spinner_without_total():
 
-    bar = Bar(progress='{spinner}',
-              template='Spinner without total: {progress} '
+    bar = Bar(animation='{spinner}',
+              steps=['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'],
+              template='Spinner without total: {animation} '
                        'Elapsed: {elapsed}')
     call(bar)
 
@@ -87,13 +95,13 @@ def demo_reverse_bar():
     class MyBar(Bar):
 
         @property
-        def bar(self):
+        def progress(self):
             done_chars = int(self.fraction * self.free_space)
             remain_chars = self.free_space - done_chars
             return (self.remain_char * remain_chars
                     + self.done_char * done_chars)
 
-    bar = MyBar(total=20, template="{percent} {progress} Reverse bar")
+    bar = MyBar(total=20, template="{percent} {animation} Reverse bar")
     call(bar)
 
 
