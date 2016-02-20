@@ -85,9 +85,10 @@ class Bar:
     def render(self):
         self.free_space = ''
         self.remaining = self.total - self.done
+        self.addition = self.done - self.supply
         self.fraction = min(self.done / self.total, 1.0) if self.total else 0
         self.raw_elapsed = time.time() - self.start
-        self.raw_avg = self.raw_elapsed / self.done if self.done else 0
+        self.raw_avg = self.raw_elapsed / self.addition if self.addition else 0
         self.remaining_time = self.remaining * self.raw_avg
 
         # format_map(self) instead of format(**self) to prevent all properties
@@ -98,7 +99,7 @@ class Bar:
                            + self.invisible_chars)
         sys.stdout.write(line.format_map(self))
 
-        if self.fraction == 1.0:
+        if self.fraction >= 1.0:
             self.finish()
         else:
             sys.stdout.flush()
@@ -110,13 +111,15 @@ class Bar:
         self.update(**kwargs)
 
     def update(self, step=1, **kwargs):
-        if self.start is None:
-            self.start = time.time()
         if step:
             self.done += step
         # Allow to override any properties.
         self.__dict__.update(kwargs)
-
+        if self.start is None:
+            self.start = time.time()
+            # First call to update and forcing a done value. May be
+            # resuming a download. Keep track for better ETA computation.
+            self.supply = self.done if 'done' in kwargs else 0
         self.render()
 
     def __next__(self):

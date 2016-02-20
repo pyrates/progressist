@@ -19,40 +19,40 @@ def call(bar):
         continue
 
 
-def demo_default():
+def example_default():
     bar = Bar(total=20, prefix="Default:")
     call(bar)
 
 
-def demo_custom_done_char():
+def example_custom_done_char():
     bar = Bar(total=20, done_char='█', prefix="Custom fill character:")
     call(bar)
 
 
-def demo_custom_remain_char():
+def example_custom_remain_char():
     """Custom empty fill character."""
     bar = Bar(total=20, done_char='◉', remain_char='◯',
               prefix="Custom empty fill char:")
     call(bar)
 
 
-def demo_with_eta():
+def example_with_eta():
     bar = Bar(total=20, template='With ETA: {animation} ETA: {eta}')
     call(bar)
 
 
-def demo_with_avg():
+def example_with_avg():
     bar = Bar(total=20, template='With Average: {animation} Avg: {avg} s/item')
     call(bar)
 
 
-def demo_with_custom_color():
+def example_with_custom_color():
     bar = Bar(total=20, remain_char='-', invisible_chars=11,
               template="\r\033[34mCustom color: {animation}\033[39m")
     call(bar)
 
 
-def demo_with_custom_class():
+def example_with_custom_class():
 
     class MyBar(Bar):
 
@@ -68,20 +68,20 @@ def demo_with_custom_class():
     call(bar)
 
 
-def demo_stream():
+def example_stream():
 
     bar = Bar(total=20, animation='{stream}', steps=['⎻', '⎼'],
               template='Stream {animation} {elapsed}')
     call(bar)
 
 
-def demo_spinner():
+def example_spinner():
 
     bar = Bar(total=20, prefix="Spinner", animation='{spinner}')
     call(bar)
 
 
-def demo_spinner_without_total():
+def example_spinner_without_total():
 
     bar = Bar(animation='{spinner}',
               steps=['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'],
@@ -90,7 +90,7 @@ def demo_spinner_without_total():
     call(bar)
 
 
-def demo_reverse_bar():
+def example_reverse_bar():
 
     class MyBar(Bar):
 
@@ -105,11 +105,40 @@ def demo_reverse_bar():
     call(bar)
 
 
+def example_download():
+
+    class DownloadBar(Bar):
+        """Example of a resuming download, displaying human readable sizes."""
+
+        SUFFIXES = ['KB', 'MB', 'GB', 'TB']
+        template = ('Download |{animation}| {size_done}/{size_total}')
+        done_char = '⬛'
+
+        def _size(self, size):
+            for suffix in self.SUFFIXES:
+                size /= 1000
+                if size < 1000:
+                    return '{0:.1f} {1}'.format(size, suffix)
+
+        @property
+        def size_total(self):
+            return self._size(self.total)
+
+        @property
+        def size_done(self):
+            return self._size(self.done)
+
+    bar = DownloadBar()
+    for i in range(82944500, 197739688 + 165889, 165889):
+        time.sleep(0.002)
+        bar.update(done=i, total=197739688)
+
+
 if __name__ == '__main__':
 
     if len(sys.argv) == 2:
         globals()[sys.argv[1]]()
     else:
         for name, func in globals().copy().items():
-            if name.startswith('demo_'):
+            if name.startswith('example_'):
                 func()
