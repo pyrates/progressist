@@ -177,3 +177,11 @@ class Timedelta(timedelta):
         # recode it (we would need to handle i18n of "days").
         obj = timedelta(days=tmp.days, seconds=tmp.seconds)
         return obj
+
+
+VERSION = (0, 0, 1)
+
+__author__ = 'Yohan Boniface'
+__contact__ = "hi@yohanboniface.me"
+__homepage__ = "https://github.com/yohanboniface/progresso"
+__version__ = ".".join(map(str, VERSION))
