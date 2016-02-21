@@ -102,9 +102,9 @@ If you want to run only one example, add its name to the command line:
 name      | description   | type | default formatting
 | ------  | ------------- | ------ | ---------------- |
 prefix    | Leading label in default template | string | str
-elapsed   | The elapsed time from the first iteration | timedelta | not formattable
+elapsed   | The elapsed time from the first iteration (in seconds) | int | as timedelta
 eta       | The computed ETA | datetime | `%H:%M:%S` if less than 24 hours, else `%Y-%m-%d %H:%M:%S`
-tta       | The estimated remaining time (time to arrival) | timedelta | not formattable
+tta       | The estimated remaining time (time to arrival; in seconds) | int | as timedelta
 avg       | The average time per iteration, in seconds | float | `.2f`
 speed     | The average number of iterations per second | float | `.2f`
 done      | The number of done iterations | integer |

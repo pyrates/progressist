@@ -86,19 +86,10 @@ class Bar:
         return Percent(self.fraction)
 
     @property
-    def tta(self):
-        """Time to arrival."""
-        return Timedelta(seconds=self.remaining_time)
-
-    @property
-    def elapsed(self):
-        """Elasped time from the start."""
-        return Timedelta(seconds=self.raw_elapsed)
-
-    @property
     def eta(self):
         """Estimated time of arrival."""
-        return ETA.from_datetime(datetime.now() + self.tta)
+        remaining_time = timedelta(seconds=self.tta)
+        return ETA.from_datetime(datetime.now() + remaining_time)
 
     @property
     def speed(self):
@@ -112,9 +103,9 @@ class Bar:
         self.remaining = self.total - self.done
         self.addition = self.done - self.supply
         self.fraction = min(self.done / self.total, 1.0) if self.total else 0
-        self.raw_elapsed = time.time() - self.start
-        self.avg = Float(self.raw_elapsed / self.addition if self.addition else 0)
-        self.remaining_time = self.remaining * self.avg
+        self.elapsed = Timedelta(time.time() - self.start)
+        self.avg = Float(self.elapsed / self.addition if self.addition else 0)
+        self.tta = Timedelta(self.remaining * self.avg)
 
         # format_map(self) instead of format(**self) to prevent all properties
         # to be evaluated, even ones not needed for the given template.
@@ -195,15 +186,23 @@ class ETA(datetime):
                    minute=dt.minute, second=dt.second, tzinfo=dt.tzinfo)
 
 
-class Timedelta(timedelta):
+class Timedelta(int):
+    """An integer that is formatted by default as timedelta."""
 
-    def __new__(cls, **kwargs):
-        tmp = timedelta(**kwargs)
+    def format_as_timedelta(self):
+        """Format seconds as timedelta."""
+        # Do we want this as a Formatter type also?
+        tmp = timedelta(seconds=self)
         # Filter out microseconds from str format.
         # timedelta does not have a __format__ method, and we don't want to
         # recode it (we would need to handle i18n of "days").
         obj = timedelta(days=tmp.days, seconds=tmp.seconds)
-        return obj
+        return str(obj)
+
+    def __format__(self, format_spec):
+        if not format_spec:
+            return self.format_as_timedelta()
+        return super().__format__(format_spec)
 
 
 VERSION = (0, 0, 1)
