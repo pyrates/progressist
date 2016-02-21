@@ -101,14 +101,9 @@ class Bar:
         return ETA.from_datetime(datetime.now() + self.tta)
 
     @property
-    def avg(self):
-        """Average time per iteration, in seconds."""
-        return Float(self.raw_avg)
-
-    @property
     def speed(self):
         """Number of iterations per second."""
-        return Float(1.0 / self.raw_avg)
+        return Float(1.0 / self.avg if self.avg else 0)
 
     def render(self):
         if self.start is None:
@@ -118,8 +113,8 @@ class Bar:
         self.addition = self.done - self.supply
         self.fraction = min(self.done / self.total, 1.0) if self.total else 0
         self.raw_elapsed = time.time() - self.start
-        self.raw_avg = self.raw_elapsed / self.addition if self.addition else 0
-        self.remaining_time = self.remaining * self.raw_avg
+        self.avg = Float(self.raw_elapsed / self.addition if self.addition else 0)
+        self.remaining_time = self.remaining * self.avg
 
         # format_map(self) instead of format(**self) to prevent all properties
         # to be evaluated, even ones not needed for the given template.

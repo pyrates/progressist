@@ -109,7 +109,7 @@ def example_download():
 
     class DownloadBar(Bar):
         """Example of a resuming download, displaying human readable sizes."""
-        template = ('Download |{animation}| {done:B}/{total:B}')
+        template = ('Download |{animation}| {done:B}/{total:B} ({speed:B}/s)')
         done_char = '⬛'
 
     bar = DownloadBar()
