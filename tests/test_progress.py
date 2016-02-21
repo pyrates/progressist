@@ -1,5 +1,19 @@
 import time
 
+import pytest
+from progresso import Formatter
+
+
+@pytest.mark.parametrize('input,expected', [
+    (12, '0.0 KiB'),
+    (1098, '1.1 KiB'),
+    (109830983, '104.7 MiB'),
+    (109830983809823, '99.9 TiB'),
+])
+def test_format_bytes(input, expected):
+    fmt = Formatter()
+    assert fmt.format('{0:B}', input) == expected
+
 
 def test_default(bar, capsys):
     bar.update(done=37)

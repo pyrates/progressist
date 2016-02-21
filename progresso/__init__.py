@@ -1,7 +1,30 @@
 from datetime import datetime, timedelta
 import shutil
+import string
 import sys
 import time
+
+
+class Formatter(string.Formatter):
+    """
+    Allow to have some custom formatting types.
+    """
+
+    def format_bytes(self, size, spec=None):
+        SUFFIXES = ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+        spec = spec or '.1'
+        for suffix in SUFFIXES:
+            size /= 1024
+            if size < 1024:
+                return '{value:{spec}f} {suffix}'.format(value=size, spec=spec,
+                                                         suffix=suffix)
+
+    def format_field(self, value, format_string):
+        if format_string.endswith("B"):
+            spec = format_string[:-1]
+            return self.format_bytes(int(value), spec=spec)
+        else:
+            return super().format_field(value, format_string)
 
 
 class Bar:
@@ -16,12 +39,17 @@ class Bar:
     steps = ('-', '\\', '|', '/')
     animation = '{progress}'
     invisible_chars = 1  # "\r"
+    supply = 0
 
     def __init__(self, **kwargs):
         self.columns = self.compute_columns()
         self.__dict__.update(kwargs)
         if not self.template.startswith('\r'):
             self.template = '\r' + self.template
+        self.formatter = Formatter()
+
+    def format(self, tpl, *args, **kwargs):
+        return self.formatter.vformat(tpl, None, self)
 
     def compute_columns(self):
         return shutil.get_terminal_size((80, 20)).columns
@@ -83,7 +111,9 @@ class Bar:
         return Float(1.0 / self.raw_avg)
 
     def render(self):
-        self.free_space = ''
+        if self.start is None:
+            self.start = time.time()
+        self.free_space = 0
         self.remaining = self.total - self.done
         self.addition = self.done - self.supply
         self.fraction = min(self.done / self.total, 1.0) if self.total else 0
@@ -93,11 +123,11 @@ class Bar:
 
         # format_map(self) instead of format(**self) to prevent all properties
         # to be evaluated, even ones not needed for the given template.
-        line = self.template.format_map(self)
+        line = self.format(self.template)
 
         self.free_space = (self.columns - len(line) + len(self.animation)
                            + self.invisible_chars)
-        sys.stdout.write(line.format_map(self))
+        sys.stdout.write(self.format(line))
 
         if self.fraction >= 1.0:
             self.finish()
@@ -115,11 +145,10 @@ class Bar:
             self.done += step
         # Allow to override any properties.
         self.__dict__.update(kwargs)
-        if self.start is None:
-            self.start = time.time()
+        if self.start is None and 'done' in kwargs:
             # First call to update and forcing a done value. May be
             # resuming a download. Keep track for better ETA computation.
-            self.supply = self.done if 'done' in kwargs else 0
+            self.supply = self.done
         self.render()
 
     def __next__(self):

@@ -109,24 +109,8 @@ def example_download():
 
     class DownloadBar(Bar):
         """Example of a resuming download, displaying human readable sizes."""
-
-        SUFFIXES = ['KB', 'MB', 'GB', 'TB']
-        template = ('Download |{animation}| {size_done}/{size_total}')
+        template = ('Download |{animation}| {done:B}/{total:B}')
         done_char = '⬛'
-
-        def _size(self, size):
-            for suffix in self.SUFFIXES:
-                size /= 1000
-                if size < 1000:
-                    return '{0:.1f} {1}'.format(size, suffix)
-
-        @property
-        def size_total(self):
-            return self._size(self.total)
-
-        @property
-        def size_done(self):
-            return self._size(self.done)
 
     bar = DownloadBar()
     for i in range(82944500, 197739688 + 165889, 165889):

@@ -58,6 +58,15 @@ You can add more template vars by subclassing `Bar`:
 
     bar = MyBar(total=20, template='{prefix} {progress} Swap usage: {swap}')
 
+If you are using the same configuration at different places, create a subclass and
+set its configuration as class properties:
+
+    class MyBar(Bar):
+        template = ('Download |{animation}| {done:B}/{total:B}')
+        done_char = '⬛'
+
+    bar = MyBar()
+
 You want to compute yourself the done part?
 
     bar.update(done=myvar / othervar * another)
@@ -103,3 +112,22 @@ total     | The total number of iterations to be done | integer |
 remaing   | The number of iterations remaining to be done | integer |
 percent   | The percent of iterations already done | float | `.2%`
 animation | The actual progress bar | template string (`{bar}`, `{spinner}` or `{stream}`) |
+
+
+## Custom formatting
+
+We extend python default Formatter with some handy custom specs:
+
+- `B` type: render an int as human friendly bytes size. For example:
+
+        > bar.total = 109830983
+        > bar.template = '{total:B}'
+        > bar.render()
+        '104.7 MiB'
+
+  You can still override the ndigits value:
+
+        > bar.total = 109830983
+        > bar.template = '{total:0.2B}'
+        > bar.render()
+        '104.74 MiB'
