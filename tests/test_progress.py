@@ -94,14 +94,14 @@ def test_can_override_percent_formatting(bar, capsys):
 def test_avg(bar, capsys):
     bar.template = '\r{prefix} {animation} {avg}/s'
     bar.start = time.time() - 25
-    bar.done = 50
-    bar.render()
-    out, err = capsys.readouterr()
-    assert out == '\rBar: ===================                    0.50/s'
     bar.done = 43
     bar.render()
     out, err = capsys.readouterr()
     assert out == '\rBar: ================                       0.58/s'
+    bar.done = 50
+    bar.render()
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ===================                    0.50/s'
 
 
 def test_can_override_avg_formatting(bar, capsys):
@@ -184,3 +184,16 @@ def test_custom_spinner_steps(bar, capsys):
     bar.update()
     out, err = capsys.readouterr()
     assert out == '\rBar: * 1/100'
+
+
+def test_throttle(bar, capsys):
+    bar.throttle = 5
+    bar.update(done=37)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ==============                         37/100'
+    bar.update(done=38)
+    out, err = capsys.readouterr()
+    assert out == ''
+    bar.update(done=42)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ===============                        42/100'

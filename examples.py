@@ -81,6 +81,12 @@ def example_spinner():
     call(bar)
 
 
+def example_throttle():
+
+    bar = Bar(total=20, throttle=2, prefix='Throttling')
+    call(bar)
+
+
 def example_spinner_without_total():
 
     bar = Bar(animation='{spinner}',

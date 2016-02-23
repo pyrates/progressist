@@ -88,6 +88,22 @@ If you want to run only one example, add its name to the command line:
 
 ## Parameters
 
+You can set all of those parameters either as class properties:
+
+    class MyBar(Bar):
+        done_char = 'x'
+
+    bar = Bar()
+
+Or at init:
+
+    bar = Bar(done_char='x')
+
+Or at update:
+
+    bar = Bar()
+    bar.update(prefix='Finishing')
+
 | name  | default | description |
 | ----- | ------ | ------------- |
 | done_char | `=` | Char used for filling the progress bar |
@@ -95,6 +111,7 @@ If you want to run only one example, add its name to the command line:
 | template | `{prefix} {progress} {percent} ({done}/{total})` | The template of the whole line |
 | prefix | `Progress:` | The leading label |
 | animation | '{progress}' | The actual widget used for progress, can be `{bar}`, `{spinner}` or `{stream}`
+| throttle | 0 | Minimum value between two `update` call to issue a render
 
 
 ## Built in template vars

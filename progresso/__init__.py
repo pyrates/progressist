@@ -40,6 +40,8 @@ class Bar:
     animation = '{progress}'
     invisible_chars = 1  # "\r"
     supply = 0
+    outro = '\n'
+    throttle = 0  # Do not render unless done step is more than throttle.
 
     def __init__(self, **kwargs):
         self.columns = self.compute_columns()
@@ -47,6 +49,7 @@ class Bar:
         if not self.template.startswith('\r'):
             self.template = '\r' + self.template
         self.formatter = Formatter()
+        self._last_render = 0
 
     def format(self, tpl, *args, **kwargs):
         return self.formatter.vformat(tpl, None, self)
@@ -97,6 +100,9 @@ class Bar:
         return Float(1.0 / self.avg if self.avg else 0)
 
     def render(self):
+        if self.done < self._last_render + self.throttle:
+            return
+        self._last_render = self.done
         if self.start is None:
             self.start = time.time()
         self.free_space = 0
@@ -121,7 +127,7 @@ class Bar:
             sys.stdout.flush()
 
     def finish(self):
-        sys.stdout.write('\n')
+        sys.stdout.write(self.format(self.outro))
 
     def __call__(self, **kwargs):
         self.update(**kwargs)
