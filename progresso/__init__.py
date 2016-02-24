@@ -100,7 +100,7 @@ class Bar:
         return Float(1.0 / self.avg if self.avg else 0)
 
     def render(self):
-        if self.done < self._last_render + self.throttle:
+        if self.done < self._last_render + self.throttle <= self.total:
             return
         self._last_render = self.done
         if self.start is None:
