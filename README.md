@@ -13,7 +13,7 @@ Minimalist and pythonic progress bar.
     from progresso import Bar
     bar = Bar(total=mytotalstuff)
     for item in mystuff:
-        do_stuff
+        # do_stuff
         bar.update()
 
 Or use `bar.iter` transparently
