@@ -5,7 +5,7 @@ try:
     import psutil
 except ImportError:
     psutil = None
-from progresso import Bar
+from progresso import ProgressBar
 
 
 def loop():
@@ -20,41 +20,42 @@ def call(bar):
 
 
 def example_default():
-    bar = Bar(total=20, prefix="Default:")
+    bar = ProgressBar(total=20, prefix="Default:")
     call(bar)
 
 
 def example_custom_done_char():
-    bar = Bar(total=20, done_char='█', prefix="Custom fill character:")
+    bar = ProgressBar(total=20, done_char='█', prefix="Custom fill character:")
     call(bar)
 
 
 def example_custom_remain_char():
     """Custom empty fill character."""
-    bar = Bar(total=20, done_char='◉', remain_char='◯',
+    bar = ProgressBar(total=20, done_char='◉', remain_char='◯',
               prefix="Custom empty fill char:")
     call(bar)
 
 
 def example_with_eta():
-    bar = Bar(total=20, template='With ETA: {animation} ETA: {eta}')
+    bar = ProgressBar(total=20, template='With ETA: {animation} ETA: {eta}')
     call(bar)
 
 
 def example_with_avg():
-    bar = Bar(total=20, template='With Average: {animation} Avg: {avg} s/item')
+    bar = ProgressBar(total=20,
+                      template='With Average: {animation} Avg: {avg} s/item')
     call(bar)
 
 
 def example_with_custom_color():
-    bar = Bar(total=20, remain_char='-', invisible_chars=11,
-              template="\r\033[34mCustom color: {animation}\033[39m")
+    bar = ProgressBar(total=20, remain_char='-', invisible_chars=11,
+                      template="\r\033[34mCustom color: {animation}\033[39m")
     call(bar)
 
 
 def example_with_custom_class():
 
-    class MyBar(Bar):
+    class MyBar(ProgressBar):
 
         @property
         def swap(self):
@@ -70,35 +71,35 @@ def example_with_custom_class():
 
 def example_stream():
 
-    bar = Bar(total=20, animation='{stream}', steps=['⎻', '⎼'],
-              template='Stream {animation} {elapsed}')
+    bar = ProgressBar(total=20, animation='{stream}', steps=['⎻', '⎼'],
+                      template='Stream {animation} {elapsed}')
     call(bar)
 
 
 def example_spinner():
 
-    bar = Bar(total=20, prefix="Spinner", animation='{spinner}')
+    bar = ProgressBar(total=20, prefix="Spinner", animation='{spinner}')
     call(bar)
 
 
 def example_throttle():
 
-    bar = Bar(total=20, throttle=2, prefix='Throttling')
+    bar = ProgressBar(total=20, throttle=2, prefix='Throttling')
     call(bar)
 
 
 def example_spinner_without_total():
 
-    bar = Bar(animation='{spinner}',
-              steps=['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'],
-              template='Spinner without total: {animation} '
-                       'Elapsed: {elapsed}')
+    bar = ProgressBar(animation='{spinner}',
+                      steps=['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'],
+                      template='Spinner without total: {animation} '
+                               'Elapsed: {elapsed}')
     call(bar)
 
 
 def example_reverse_bar():
 
-    class MyBar(Bar):
+    class MyBar(ProgressBar):
 
         @property
         def progress(self):
@@ -113,7 +114,7 @@ def example_reverse_bar():
 
 def example_download():
 
-    class DownloadBar(Bar):
+    class DownloadBar(ProgressBar):
         """Example of a resuming download, displaying human readable sizes."""
         template = ('Download |{animation}| {done:B}/{total:B} ({speed:B}/s)')
         done_char = '⬛'

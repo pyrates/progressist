@@ -27,7 +27,7 @@ class Formatter(string.Formatter):
             return super().format_field(value, format_string)
 
 
-class Bar:
+class ProgressBar:
 
     prefix = 'Progress:'
     done_char = '='
