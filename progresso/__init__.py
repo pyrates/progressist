@@ -4,6 +4,13 @@ import string
 import sys
 import time
 
+try:
+    import pkg_resources
+except ImportError:
+    pass
+else:
+    VERSION = pkg_resources.get_distribution(__package__).version
+
 
 class Formatter(string.Formatter):
     """
@@ -209,11 +216,3 @@ class Timedelta(int):
         if not format_spec:
             return self.format_as_timedelta()
         return super().__format__(format_spec)
-
-
-VERSION = (0, 0, 1)
-
-__author__ = 'Yohan Boniface'
-__contact__ = "hi@yohanboniface.me"
-__homepage__ = "https://github.com/yohanboniface/progresso"
-__version__ = ".".join(map(str, VERSION))
