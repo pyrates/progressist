@@ -120,8 +120,6 @@ class ProgressBar:
         self.avg = Float(self.elapsed / self.addition if self.addition else 0)
         self.tta = Timedelta(self.remaining * self.avg)
 
-        # format_map(self) instead of format(**self) to prevent all properties
-        # to be evaluated, even ones not needed for the given template.
         line = self.format(self.template)
 
         self.free_space = (self.columns - len(line) + len(self.animation)
