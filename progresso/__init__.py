@@ -99,7 +99,7 @@ class ProgressBar:
     def eta(self):
         """Estimated time of arrival."""
         remaining_time = timedelta(seconds=self.tta)
-        return ETA.from_datetime(datetime.now() + remaining_time)
+        return ETA(datetime.now() + remaining_time)
 
     @property
     def speed(self):
@@ -181,6 +181,16 @@ class Percent(float):
 
 class ETA(datetime):
 
+    def __new__(cls, *args, **kwargs):
+        if args and isinstance(args[0], datetime.datetime):
+            # datetime + timedelta returns a datetime, while we want an ETA.
+            dt = args[0]
+            super().__new__(year=dt.year, month=dt.month, day=dt.day,
+                            hour=dt.hour, minute=dt.minute, second=dt.second,
+                            tzinfo=dt.tzinfo)
+        else:
+            super().__new__(*args, **kwargs)
+
     def __format__(self, format_spec):
         if not format_spec:
             now = datetime.now()
@@ -189,12 +199,6 @@ class ETA(datetime):
             if diff.days > 1:
                 format_spec = '%Y-%m-%d %H:%M:%S'
         return super().__format__(format_spec)
-
-    @classmethod
-    def from_datetime(cls, dt):
-        # Find a more elegant way.
-        return cls(year=dt.year, month=dt.month, day=dt.day, hour=dt.hour,
-                   minute=dt.minute, second=dt.second, tzinfo=dt.tzinfo)
 
 
 class Timedelta(int):
