@@ -10,8 +10,8 @@ Minimalist and pythonic progress bar.
 
 ## Usage
 
-    from progresso import Bar
-    bar = Bar(total=mytotalstuff)
+    from progresso import ProgressBar
+    bar = ProgressBar(total=mytotalstuff)
     for item in mystuff:
         # do_stuff
         bar.update()
@@ -24,21 +24,21 @@ Or use `bar.iter` transparently
 It comes with a default rendering that is enough for starting, but it's made to be
 customised very easily: just writting a template string:
 
-    bar = Bar(total=mytotalstuff, template='{prefix} {progress} ETA: {eta}')
+    bar = ProgressBar(total=mytotalstuff, template='{prefix} {progress} ETA: {eta}')
 
 It's just plain [python formatting](https://docs.python.org/3.4/library/string.html#formatspec)
 so you can use any valid string formatting to take control over the appearance.
 For example:
 
-    bar = Bar(total=mytotalstuff, template='{progress} {percent:.2%} ETA: {eta:%H:%M:%S}')
+    bar = ProgressBar(total=mytotalstuff, template='{progress} {percent:.2%} ETA: {eta:%H:%M:%S}')
 
 You can also just change the fill character:
 
-    bar = Bar(total=mytotalstuff, done_char='#')
+    bar = ProgressBar(total=mytotalstuff, done_char='#')
 
 You can change the progress logic itself, for example to use a spinner (included):
 
-    bar = Bar(total=mytotalstuff, progress='{spinner}')
+    bar = ProgressBar(total=mytotalstuff, progress='{spinner}')
     # 'progress' kwarg must return a valid template variable.
     # included ones are {bar} and {spinner}
 
@@ -48,9 +48,9 @@ You can step by more than one at a time:
         amount = do_stuff()
         bar.update(step=amount)
 
-You can add more template vars by subclassing `Bar`:
+You can add more template vars by subclassing `ProgressBar`:
 
-    class MyBar(Bar):
+    class MyBar(ProgressBar):
 
         @property
         def swap(self):
@@ -61,7 +61,7 @@ You can add more template vars by subclassing `Bar`:
 If you are using the same configuration at different places, create a subclass and
 set its configuration as class properties:
 
-    class MyBar(Bar):
+    class MyBar(ProgressBar):
         template = ('Download |{animation}| {done:B}/{total:B}')
         done_char = '⬛'
 
@@ -90,14 +90,14 @@ If you want to run only one example, add its name to the command line:
 
 You can set all of those parameters either as class properties:
 
-    class MyBar(Bar):
+    class MyBar(ProgressBar):
         done_char = 'x'
 
     bar = Bar()
 
 Or at init:
 
-    bar = Bar(done_char='x')
+    bar = ProgressBar(done_char='x')
 
 Or at update:
 
