@@ -64,9 +64,6 @@ class ProgressBar:
     def compute_columns(self):
         return shutil.get_terminal_size((80, 20)).columns
 
-    def keys(self):
-        return [k for k in dir(self) if not k.startswith('_')]
-
     def __getitem__(self, item):
         return getattr(self, item, '')
 
