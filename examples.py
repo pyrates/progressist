@@ -5,7 +5,7 @@ try:
     import psutil
 except ImportError:
     psutil = None
-from progresso import ProgressBar
+from progressist import ProgressBar
 
 
 def loop():
@@ -32,7 +32,7 @@ def example_custom_done_char():
 def example_custom_remain_char():
     """Custom empty fill character."""
     bar = ProgressBar(total=20, done_char='◉', remain_char='◯',
-              prefix="Custom empty fill char:")
+                      prefix="Custom empty fill char:")
     call(bar)
 
 

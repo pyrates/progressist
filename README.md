@@ -1,16 +1,15 @@
-# Progresso
+# Progressist
 
 Minimalist and pythonic progress bar.
 
 
 ## Install
 
-    pip install git+https://github.com/yohanboniface/progresso  # No pypi package yet
-
+    pip install progressist
 
 ## Usage
 
-    from progresso import ProgressBar
+    from progressist import ProgressBar
     bar = ProgressBar(total=mytotalstuff)
     for item in mystuff:
         # do_stuff
@@ -75,7 +74,7 @@ Or the target total may change during process?
 
     bar.update(total=newcomputedtotal)
 
-See [examples](https://github.com/yohanboniface/progresso/blob/master/examples.py) for inspiration.
+See [examples](https://github.com/yohanboniface/progressist/blob/master/examples.py) for inspiration.
 
 To run examples, when git cloned the repository, simply run:
 

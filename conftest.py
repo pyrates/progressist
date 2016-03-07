@@ -2,7 +2,7 @@ from time import time
 
 import pytest
 
-from progresso import ProgressBar
+from progressist import ProgressBar
 
 
 @pytest.fixture

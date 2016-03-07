@@ -11,11 +11,11 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 VERSION = (0, 0, 1)
 
 setup(
-    name='progresso',
+    name='progressist',
     version=".".join(map(str, VERSION)),
     description='Minimalist and pythonic progress bar',
     long_description=long_description,
-    url="https://github.com/yohanboniface/progresso",
+    url="https://github.com/yohanboniface/progressist",
     author='Yohan Boniface',
     author_email="hi@yohanboniface.me",
     license='WTFPL',
@@ -29,7 +29,7 @@ setup(
     ],
     keywords='progress bar',
     packages=find_packages(exclude=['tests']),
-    py_modules=['progresso'],
+    py_modules=['progressist'],
     extras_require={
         'test': ['pytest'],
     },

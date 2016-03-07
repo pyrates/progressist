@@ -1,7 +1,6 @@
 import time
 
 import pytest
-from progresso import Formatter
 
 
 @pytest.mark.parametrize('input,expected', [
@@ -11,6 +10,7 @@ from progresso import Formatter
     (109830983809823, '99.9 TiB'),
 ])
 def test_format_bytes(input, expected):
+    from progressist import Formatter
     fmt = Formatter()
     assert fmt.format('{0:B}', input) == expected
 
