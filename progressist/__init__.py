@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+import datetime
 import shutil
 import string
 import sys
@@ -98,8 +98,8 @@ class ProgressBar:
     @property
     def eta(self):
         """Estimated time of arrival."""
-        remaining_time = timedelta(seconds=self.tta)
-        return ETA(datetime.now() + remaining_time)
+        remaining_time = datetime.timedelta(seconds=self.tta)
+        return ETA(datetime.datetime.now() + remaining_time)
 
     @property
     def speed(self):
@@ -179,21 +179,21 @@ class Percent(float):
         return super().__format__(format_spec)
 
 
-class ETA(datetime):
+class ETA(datetime.datetime):
 
     def __new__(cls, *args, **kwargs):
-        if args and isinstance(args[0], datetime.datetime):
+        if args and not isinstance(args[0], int):
             # datetime + timedelta returns a datetime, while we want an ETA.
             dt = args[0]
-            super().__new__(year=dt.year, month=dt.month, day=dt.day,
-                            hour=dt.hour, minute=dt.minute, second=dt.second,
-                            tzinfo=dt.tzinfo)
+            return super().__new__(cls, year=dt.year, month=dt.month,
+                                   day=dt.day, hour=dt.hour, minute=dt.minute,
+                                   second=dt.second, tzinfo=dt.tzinfo)
         else:
-            super().__new__(*args, **kwargs)
+            return super().__new__(cls, *args, **kwargs)
 
     def __format__(self, format_spec):
         if not format_spec:
-            now = datetime.now()
+            now = datetime.datetime.now()
             diff = self - now
             format_spec = '%H:%M:%S'
             if diff.days > 1:
@@ -207,11 +207,11 @@ class Timedelta(int):
     def format_as_timedelta(self):
         """Format seconds as timedelta."""
         # Do we want this as a Formatter type also?
-        tmp = timedelta(seconds=self)
+        tmp = datetime.timedelta(seconds=self)
         # Filter out microseconds from str format.
         # timedelta does not have a __format__ method, and we don't want to
         # recode it (we would need to handle i18n of "days").
-        obj = timedelta(days=tmp.days, seconds=tmp.seconds)
+        obj = datetime.timedelta(days=tmp.days, seconds=tmp.seconds)
         return str(obj)
 
     def __format__(self, format_spec):

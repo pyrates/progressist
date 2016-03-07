@@ -1,4 +1,5 @@
 import time
+import datetime
 
 import pytest
 
@@ -203,3 +204,23 @@ def test_throttle(bar, capsys):
     bar.update(done=100)
     out, err = capsys.readouterr()
     assert out == '\rBar: ===================================== 100/100\n'
+
+
+def test_eta(bar, capsys, monkeypatch):
+
+    class fake_datetime(datetime.datetime):
+        @classmethod
+        def now(cls):
+            return datetime.datetime(2016, 4, 7, 1, 2, 3)
+
+    def fake_time():
+        return datetime.datetime.now().timestamp()
+
+    monkeypatch.setattr(datetime, 'datetime', fake_datetime)
+    monkeypatch.setattr(time, 'time', fake_time)
+    # 3 seconds for doing 50% for the job
+    bar.start = datetime.datetime.now().timestamp() - 3
+    bar.template = '\r{prefix} {animation} {eta}'
+    bar.update(done=50)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ==================                   01:02:06'
