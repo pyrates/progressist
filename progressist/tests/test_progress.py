@@ -20,6 +20,7 @@ def test_format_bytes(input, expected):
     (12, '12'),
     ('12', '12'),
     (12.0, '12'),
+    ('notcastable', 'notcastable'),
 ])
 def test_format_int(input, expected):
     from progressist import Formatter
@@ -229,9 +230,74 @@ def test_eta(bar, capsys, monkeypatch):
 
     monkeypatch.setattr(datetime, 'datetime', fake_datetime)
     monkeypatch.setattr(time, 'time', fake_time)
-    # 3 seconds for doing 50% for the job
+    # 3 seconds for doing 50% for the job.
     bar.start = datetime.datetime.now().timestamp() - 3
     bar.template = '\r{prefix} {animation} {eta}'
     bar.update(done=50)
     out, err = capsys.readouterr()
     assert out == '\rBar: ==================                   01:02:06'
+
+
+def test_more_than_24_hours_eta(bar, capsys, monkeypatch):
+
+    class fake_datetime(datetime.datetime):
+        @classmethod
+        def now(cls):
+            return datetime.datetime(2016, 4, 7, 1, 2, 3)
+
+    def fake_time():
+        return datetime.datetime.now().timestamp()
+
+    monkeypatch.setattr(datetime, 'datetime', fake_datetime)
+    monkeypatch.setattr(time, 'time', fake_time)
+    # 1 day and 1 second for doing 50% for the job.
+    bar.start = datetime.datetime.now().timestamp() - (60 * 60 * 24 + 1)
+    bar.template = '\r{prefix} {animation} {eta}'
+    bar.update(done=50)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ============              2016-04-08 01:02:04'
+
+
+def test_tta(bar, capsys, monkeypatch):
+
+    bar.start = datetime.datetime.now().timestamp() - 3
+    bar.template = '\r{prefix} {animation} {tta}'
+    bar.update(done=50)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ==================                    0:00:03'
+
+
+def test_tta_can_be_formatted_as_int(bar, capsys, monkeypatch):
+
+    bar.start = datetime.datetime.now().timestamp() - 3
+    bar.template = '\r{prefix} {animation} | Remaining: {tta:d} seconds'
+    bar.update(done=50)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ===========            | Remaining: 3 seconds'
+
+
+def test_stream(bar, capsys):
+    bar.animation = '{stream}'
+    bar.steps = ['⎻', '⎼']
+    bar.update(50)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ⎻⎼⎻⎼⎻⎼⎻⎼⎻⎼⎻⎼⎻⎼⎻⎼⎻⎼⎻⎼⎻⎼⎻⎼⎻⎼⎻⎼⎻⎼⎻⎼⎻⎼⎻⎼⎻⎼ 50/100'
+
+
+def test_call(bar, capsys):
+    bar(done=37)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ==============                         37/100'
+    bar(done=50)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ===================                    50/100'
+    bar(done=86)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ================================       86/100'
+
+
+def test_next(bar, capsys):
+    bar.done = 37
+    next(bar)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ==============                         38/100'

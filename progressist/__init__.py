@@ -6,7 +6,7 @@ import time
 
 try:
     import pkg_resources
-except ImportError:
+except ImportError:  # pragma: no cover
     pass
 else:
     VERSION = pkg_resources.get_distribution(__package__).version
@@ -203,7 +203,7 @@ class ETA(datetime.datetime):
             now = datetime.datetime.now()
             diff = self - now
             format_spec = '%H:%M:%S'
-            if diff.days > 1:
+            if diff.days > 0:
                 format_spec = '%Y-%m-%d %H:%M:%S'
         return super().__format__(format_spec)
 
