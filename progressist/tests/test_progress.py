@@ -13,7 +13,18 @@ import pytest
 def test_format_bytes(input, expected):
     from progressist import Formatter
     fmt = Formatter()
-    assert fmt.format('{0:B}', input) == expected
+    assert fmt.format('{:B}', input) == expected
+
+
+@pytest.mark.parametrize('input,expected', [
+    (12, '12'),
+    ('12', '12'),
+    (12.0, '12'),
+])
+def test_format_int(input, expected):
+    from progressist import Formatter
+    fmt = Formatter()
+    assert fmt.format('{:D}', input) == expected
 
 
 def test_default(bar, capsys):

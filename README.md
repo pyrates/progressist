@@ -147,3 +147,10 @@ We extend python default Formatter with some handy custom specs:
         > bar.template = '{total:0.2B}'
         > bar.render()
         '104.74 MiB'
+
+- `D` type: try to cast to integer. For example:
+
+        > bar.speed = 103.23
+        > bar.template = '{speed:D}'
+        > bar.render()
+        '103'

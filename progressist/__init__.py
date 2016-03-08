@@ -26,12 +26,21 @@ class Formatter(string.Formatter):
                 return '{value:{spec}f} {suffix}'.format(value=size, spec=spec,
                                                          suffix=suffix)
 
+    def format_int(self, value):
+        # Force integer representation.
+        try:
+            value = int(value)
+        except ValueError:
+            pass
+        return str(value)
+
     def format_field(self, value, format_string):
         if format_string.endswith("B"):
             spec = format_string[:-1]
             return self.format_bytes(int(value), spec=spec)
-        else:
-            return super().format_field(value, format_string)
+        elif format_string.endswith("D"):
+            return self.format_int(value)
+        return super().format_field(value, format_string)
 
 
 class ProgressBar:
