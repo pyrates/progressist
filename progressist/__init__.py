@@ -58,6 +58,7 @@ class ProgressBar:
     supply = 0
     outro = '\n'
     throttle = 0  # Do not render unless done step is more than throttle.
+    fraction = 0
 
     def __init__(self, **kwargs):
         self.columns = self.compute_columns()
