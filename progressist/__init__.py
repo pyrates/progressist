@@ -59,6 +59,7 @@ class ProgressBar:
     outro = '\n'
     throttle = 0  # Do not render unless done step is more than throttle.
     fraction = 0
+    prints = 0
 
     def __init__(self, **kwargs):
         self.columns = self.compute_columns()
@@ -79,7 +80,7 @@ class ProgressBar:
 
     @property
     def spinner(self):
-        step = self.done % len(self.steps)
+        step = self.prints % len(self.steps)
         return self.steps[int(step)]
 
     @property
@@ -94,7 +95,7 @@ class ProgressBar:
     def stream(self):
         chars = []
         for i in range(self.free_space):
-            idx = (self.done + i) % len(self.steps)
+            idx = (self.prints + i) % len(self.steps)
             chars.append(self.steps[idx])
         return ''.join(chars)
 
@@ -114,8 +115,10 @@ class ProgressBar:
         return Float(1.0 / self.avg if self.avg else 0)
 
     def render(self):
-        if self.done < self._last_render + self.throttle <= self.total:
-            return
+        throttle = self._last_render + self.throttle
+        if self.done < throttle:
+            if not self.total or throttle <= self.total:
+                return
         self._last_render = self.done
         if self.start is None:
             self.start = time.time()
@@ -132,6 +135,7 @@ class ProgressBar:
         self.free_space = (self.columns - len(line) + len(self.animation)
                            + self.invisible_chars)
         sys.stdout.write(self.format(line))
+        self.prints += 1
 
         if self.fraction >= 1.0:
             self.finish()
