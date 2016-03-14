@@ -9,7 +9,8 @@ try:
 except ImportError:  # pragma: no cover
     pass
 else:
-    VERSION = pkg_resources.get_distribution(__package__).version
+    if __package__:
+        VERSION = pkg_resources.get_distribution(__package__).version
 
 
 class Formatter(string.Formatter):
