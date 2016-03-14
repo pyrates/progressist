@@ -19,16 +19,26 @@ def call(bar):
         continue
 
 
+REGISTRY = []
+
+def register(func):
+    REGISTRY.append(func)
+    return func
+
+
+@register
 def example_default():
     bar = ProgressBar(total=20, prefix="Default:")
     call(bar)
 
 
+@register
 def example_custom_done_char():
     bar = ProgressBar(total=20, done_char='█', prefix="Custom fill character:")
     call(bar)
 
 
+@register
 def example_custom_remain_char():
     """Custom empty fill character."""
     bar = ProgressBar(total=20, done_char='◉', remain_char='◯',
@@ -36,23 +46,27 @@ def example_custom_remain_char():
     call(bar)
 
 
+@register
 def example_with_eta():
     bar = ProgressBar(total=20, template='With ETA: {animation} ETA: {eta}')
     call(bar)
 
 
+@register
 def example_with_avg():
     bar = ProgressBar(total=20,
                       template='With Average: {animation} Avg: {avg} s/item')
     call(bar)
 
 
+@register
 def example_with_custom_color():
     bar = ProgressBar(total=20, remain_char='-', invisible_chars=11,
                       template="\r\033[34mCustom color: {animation}\033[39m")
     call(bar)
 
 
+@register
 def example_with_custom_class():
 
     class MyBar(ProgressBar):
@@ -69,6 +83,7 @@ def example_with_custom_class():
     call(bar)
 
 
+@register
 def example_stream():
 
     bar = ProgressBar(total=20, animation='{stream}', steps=['⎻', '⎼'],
@@ -76,18 +91,21 @@ def example_stream():
     call(bar)
 
 
-def example_spinner():
-
-    bar = ProgressBar(total=20, prefix="Spinner", animation='{spinner}')
-    call(bar)
-
-
+@register
 def example_throttle():
 
     bar = ProgressBar(total=20, throttle=2, prefix='Throttling')
     call(bar)
 
 
+@register
+def example_spinner():
+
+    bar = ProgressBar(total=20, prefix="Spinner", animation='{spinner}')
+    call(bar)
+
+
+@register
 def example_spinner_without_total():
 
     bar = ProgressBar(animation='{spinner}',
@@ -97,6 +115,7 @@ def example_spinner_without_total():
     call(bar)
 
 
+@register
 def example_reverse_bar():
 
     class MyBar(ProgressBar):
@@ -112,6 +131,7 @@ def example_reverse_bar():
     call(bar)
 
 
+@register
 def example_download():
 
     class DownloadBar(ProgressBar):
@@ -128,8 +148,9 @@ def example_download():
 if __name__ == '__main__':
 
     if len(sys.argv) == 2:
-        globals()[sys.argv[1]]()
+        idx = REGISTRY.index(sys.argv[1])
+        if idx > -1:
+            REGISTRY[idx]()
     else:
-        for name, func in globals().copy().items():
-            if name.startswith('example_'):
-                func()
+        for func in REGISTRY:
+            func()
