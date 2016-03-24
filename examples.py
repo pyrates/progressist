@@ -1,3 +1,4 @@
+from datetime import timedelta
 import sys
 import time
 
@@ -20,6 +21,7 @@ def call(bar):
 
 
 REGISTRY = []
+
 
 def register(func):
     REGISTRY.append(func)
@@ -95,6 +97,14 @@ def example_stream():
 def example_throttle():
 
     bar = ProgressBar(total=20, throttle=2, prefix='Throttling')
+    call(bar)
+
+
+@register
+def example_throttle_by_second():
+
+    bar = ProgressBar(total=20, throttle=timedelta(seconds=1),
+                      prefix='Throttling by second')
     call(bar)
 
 

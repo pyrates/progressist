@@ -218,6 +218,63 @@ def test_throttle(bar, capsys):
     assert out == '\rBar: ===================================== 100/100\n'
 
 
+def test_float_throttle(bar, capsys):
+    bar.total = 357
+    bar.throttle = 0.05
+    bar.update(done=37)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ===                                    37/357'
+    bar.update(done=38)
+    out, err = capsys.readouterr()
+    assert out == ''
+    bar.update(done=75)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: =======                                75/357'
+    bar.update(done=252)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ==========================            252/357'
+    bar.update(done=357)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ===================================== 357/357\n'
+
+
+def test_timedelta_throttle(bar, capsys, monkeypatch):
+
+    class fake_datetime(datetime.datetime):
+        @classmethod
+        def now(cls):
+            return datetime.datetime(2016, 4, 7, 1, 2, 3)
+
+    def fake_time():
+        return datetime.datetime.now().timestamp()
+
+    monkeypatch.setattr(datetime, 'datetime', fake_datetime)
+    monkeypatch.setattr(time, 'time', fake_time)
+
+    bar.start = datetime.datetime.now().timestamp() - 1
+    bar.throttle = datetime.timedelta(seconds=2)
+
+    # First call is alway rendered
+    bar.update(done=37)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ==============                         37/100'
+
+    bar.update(done=38)
+    out, err = capsys.readouterr()
+    assert out == ''
+
+    bar._last_render = datetime.datetime.now().timestamp() - 3
+    bar.update(done=42)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ===============                        42/100'
+
+    # Should render 100% even if we are under throttle seconds.
+    bar._last_render = datetime.datetime.now().timestamp() - 1
+    bar.update(done=100)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: ===================================== 100/100\n'
+
+
 def test_eta(bar, capsys, monkeypatch):
 
     class fake_datetime(datetime.datetime):

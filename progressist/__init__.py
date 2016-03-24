@@ -115,12 +115,28 @@ class ProgressBar:
         """Number of iterations per second."""
         return Float(1.0 / self.avg if self.avg else 0)
 
+    @property
+    def throttled(self):
+        if not self.throttle:
+            return
+        if isinstance(self.throttle, (int, float)):
+            throttle = self.throttle
+            if isinstance(self.throttle, float):
+                throttle = max(1, self.total * self.throttle)
+            throttle = self._last_render + throttle
+            if self.done < throttle:
+                if not self.total or throttle <= self.total:
+                    return True
+            self._last_render = self.done
+        elif isinstance(self.throttle, datetime.timedelta):
+            if ((not self.total or self.done < self.total) and
+               self._last_render + self.throttle.seconds > time.time()):
+                return True
+            self._last_render = time.time()
+
     def render(self):
-        throttle = self._last_render + self.throttle
-        if self.done < throttle:
-            if not self.total or throttle <= self.total:
-                return
-        self._last_render = self.done
+        if self.throttled:
+            return
         if self.start is None:
             self.start = time.time()
         self.free_space = 0

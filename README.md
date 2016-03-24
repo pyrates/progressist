@@ -110,7 +110,7 @@ Or at update:
 | template | `{prefix} {progress} {percent} ({done}/{total})` | The template of the whole line |
 | prefix | `Progress:` | The leading label |
 | animation | '{progress}' | The actual widget used for progress, can be `{bar}`, `{spinner}` or `{stream}`
-| throttle | 0 | Minimum value between two `update` call to issue a render
+| throttle | 0 | Minimum value between two `update` call to issue a render: can accept an `int` for an absolute throttling, a float for a percentage throttling (total must then be set) or a dimedelta for a throttling in seconds
 
 
 ## Built in template vars
