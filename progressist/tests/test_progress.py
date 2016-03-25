@@ -275,6 +275,12 @@ def test_timedelta_throttle(bar, capsys, monkeypatch):
     assert out == '\rBar: ===================================== 100/100\n'
 
 
+def test_should_raise_if_throttle_type_is_invalid(bar):
+    bar.throttle = '1'
+    with pytest.raises(ValueError):
+        bar.update(1)
+
+
 def test_eta(bar, capsys, monkeypatch):
 
     class fake_datetime(datetime.datetime):

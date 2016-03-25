@@ -133,6 +133,9 @@ class ProgressBar:
                self._last_render + self.throttle.seconds > time.time()):
                 return True
             self._last_render = time.time()
+        else:
+            raise ValueError('Invalid type for throttle: '
+                             '{}'.format(type(self.throttle)))
 
     def render(self):
         if self.throttled:
