@@ -69,6 +69,13 @@ class ProgressBar:
             self.template = '\r' + self.template
         self.formatter = Formatter()
         self._last_render = 0
+        if self.throttle:
+            if not isinstance(self.throttle, (int, float, datetime.timedelta)):
+                raise ValueError('Invalid type for throttle: '
+                                 '{}'.format(type(self.throttle)))
+            if isinstance(self.throttle, float) and self.throttle > 1.0:
+                raise ValueError('Float throttle must be between 0 and 1.0. '
+                                 'Got {} instead.'.format(self.throttle))
 
     def format(self, tpl, *args, **kwargs):
         return self.formatter.vformat(tpl, None, self)
@@ -133,9 +140,6 @@ class ProgressBar:
                self._last_render + self.throttle.seconds > time.time()):
                 return True
             self._last_render = time.time()
-        else:
-            raise ValueError('Invalid type for throttle: '
-                             '{}'.format(type(self.throttle)))
         return False
 
     def render(self):

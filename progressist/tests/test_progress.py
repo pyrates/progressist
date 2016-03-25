@@ -3,6 +3,8 @@ import datetime
 
 import pytest
 
+from progressist import ProgressBar
+
 
 @pytest.mark.parametrize('input,expected', [
     (12, '0.0 KiB'),
@@ -276,9 +278,8 @@ def test_timedelta_throttle(bar, capsys, monkeypatch):
 
 
 def test_should_raise_if_throttle_type_is_invalid(bar):
-    bar.throttle = '1'
     with pytest.raises(ValueError):
-        bar.update(1)
+        ProgressBar(throttle='1')
 
 
 def test_eta(bar, capsys, monkeypatch):
