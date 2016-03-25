@@ -118,7 +118,7 @@ class ProgressBar:
     @property
     def throttled(self):
         if not self.throttle:
-            return
+            return False
         if isinstance(self.throttle, (int, float)):
             throttle = self.throttle
             if isinstance(self.throttle, float):
@@ -136,6 +136,7 @@ class ProgressBar:
         else:
             raise ValueError('Invalid type for throttle: '
                              '{}'.format(type(self.throttle)))
+        return False
 
     def render(self):
         if self.throttled:
