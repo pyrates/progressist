@@ -212,9 +212,14 @@ def test_throttle(bar, capsys):
     bar.update(done=42)
     out, err = capsys.readouterr()
     assert out == '\rBar: ===============                        42/100'
+    bar.update(done=98)
+    out, err = capsys.readouterr()
+    assert out == '\rBar: =====================================  98/100'
+    # Now throttle is higher than total, we should not print unless we reach
+    # the total.
     bar.update(done=99)
     out, err = capsys.readouterr()
-    assert out == '\rBar: =====================================  99/100'
+    assert out == ''
     bar.update(done=100)
     out, err = capsys.readouterr()
     assert out == '\rBar: ===================================== 100/100\n'

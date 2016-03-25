@@ -132,7 +132,8 @@ class ProgressBar:
                 throttle = max(1, self.total * self.throttle)
             throttle = self._last_render + throttle
             if self.done < throttle:
-                if not self.total or throttle <= self.total:
+                if (not self.total or throttle <= self.total
+                   or self.done < self.total):
                     return True
             self._last_render = self.done
         elif isinstance(self.throttle, datetime.timedelta):
