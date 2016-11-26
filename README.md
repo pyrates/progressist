@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/yohanboniface/progressist.svg?branch=master)](https://travis-ci.org/yohanboniface/progressist)
+[![Build Status](https://travis-ci.org/yohanboniface/progressist.svg?branch=master)](https://travis-ci.org/yohanboniface/progressist) [![PyPI](https://img.shields.io/pypi/v/progressist.svg)]() [![Coverage Status](https://coveralls.io/repos/github/yohanboniface/progressist/badge.svg?branch=coveralls)](https://coveralls.io/github/yohanboniface/progressist?branch=coveralls) [![PyPI](https://img.shields.io/pypi/pyversions/progressist.svg)]()
 
 # Progressist
 
