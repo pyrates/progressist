@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/yohanboniface/progressist.svg?branch=master)](https://travis-ci.org/yohanboniface/progressist)
+
 # Progressist
 
 Minimalist and pythonic progress bar.
