@@ -282,9 +282,37 @@ def test_timedelta_throttle(bar, capsys, monkeypatch):
     assert out == '\rBar: ===================================== 100/100\n'
 
 
+def test_throttle_without_total(bar, capsys):
+    bar.throttle = 5
+    bar.total = 0
+    bar.animation = '{spinner}'
+    bar.template = '\rSpinner: {animation} {done}'
+    bar.update(done=37)
+    out, err = capsys.readouterr()
+    assert out == '\rSpinner: - 37'
+    bar.update(done=38)
+    out, err = capsys.readouterr()
+    assert out == ''
+    bar.update(done=42)
+    out, err = capsys.readouterr()
+    assert out == '\rSpinner: \ 42'
+    bar.update(done=43)
+    out, err = capsys.readouterr()
+    assert out == ''
+    # Calling finish should force rerender, event if we are under the throttle.
+    bar.finish()
+    out, err = capsys.readouterr()
+    assert out == '\rSpinner: | 43\n'
+
+
 def test_should_raise_if_throttle_type_is_invalid(bar):
     with pytest.raises(ValueError):
         ProgressBar(throttle='1')
+
+
+def test_should_raise_if_float_throttle_type_is_gt_1(bar):
+    with pytest.raises(ValueError):
+        ProgressBar(throttle=1.1)
 
 
 def test_eta(bar, capsys, monkeypatch):

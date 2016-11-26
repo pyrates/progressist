@@ -169,6 +169,11 @@ class ProgressBar:
             sys.stdout.flush()
 
     def finish(self):
+        if not self.total and self.throttle:
+            # In "no total" mode, we cannot know that we are doing the last
+            # iteration to force rendering, so let's force render on finish.
+            self.throttle = False
+            self.render()
         sys.stdout.write(self.format(self.outro))
 
     def __call__(self, **kwargs):
