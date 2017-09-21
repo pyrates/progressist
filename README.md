@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/yohanboniface/progressist.svg?branch=master)](https://travis-ci.org/yohanboniface/progressist) [![PyPI](https://img.shields.io/pypi/v/progressist.svg)]() [![Coverage Status](https://coveralls.io/repos/github/yohanboniface/progressist/badge.svg?branch=coveralls)](https://coveralls.io/github/yohanboniface/progressist?branch=coveralls) [![PyPI](https://img.shields.io/pypi/pyversions/progressist.svg)]()
+[![Build Status](https://travis-ci.org/pyrates/progressist.svg?branch=master)](https://travis-ci.org/pyrates/progressist) [![PyPI](https://img.shields.io/pypi/v/progressist.svg)]() [![Coverage Status](https://coveralls.io/repos/github/pyrates/progressist/badge.svg?branch=coveralls)](https://coveralls.io/github/pyrates/progressist?branch=coveralls) [![PyPI](https://img.shields.io/pypi/pyversions/progressist.svg)]()
 
-# Progressist
+# Progressist
 
 Minimalist and pythonic progress bar.
 
@@ -9,7 +9,7 @@ Minimalist and pythonic progress bar.
 
     pip install progressist
 
-## Usage
+## Usage
 
     from progressist import ProgressBar
     bar = ProgressBar(total=mytotalstuff)
@@ -76,7 +76,7 @@ Or the target total may change during process?
 
     bar.update(total=newcomputedtotal)
 
-See [examples](https://github.com/yohanboniface/progressist/blob/master/examples.py) for inspiration.
+See [examples](https://github.com/pyrates/progressist/blob/master/examples.py) for inspiration.
 
 To run examples, when git cloned the repository, simply run:
 
@@ -87,7 +87,7 @@ If you want to run only one example, add its name to the command line:
     python examples.py example_download
 
 
-## Parameters
+## Parameters
 
 You can set all of those parameters either as class properties:
 
@@ -132,7 +132,7 @@ percent   | The percent of iterations already done | float | `.2%`
 animation | The actual progress bar | template string (`{bar}`, `{spinner}` or `{stream}`) |
 
 
-## Custom formatting
+## Custom formatting
 
 We extend python default Formatter with some handy custom specs:
 

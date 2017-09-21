@@ -15,7 +15,7 @@ setup(
     version=".".join(map(str, VERSION)),
     description='Minimalist and pythonic progress bar',
     long_description=long_description,
-    url="https://github.com/yohanboniface/progressist",
+    url="https://github.com/pyrates/progressist",
     author='Yohan Boniface',
     author_email="hi@yohanboniface.me",
     license='WTFPL',
