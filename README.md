@@ -4,6 +4,7 @@
 
 Minimalist and pythonic progress bar.
 
+[![asciicast](https://asciinema.org/a/l4BHmcz13ZcTOBLGk0z9JTnhZ.svg)](https://asciinema.org/a/l4BHmcz13ZcTOBLGk0z9JTnhZ)
 
 ## Install
 
