@@ -1,12 +1,5 @@
+from pathlib import Path
 from setuptools import setup, find_packages
-from codecs import open
-from os import path
-
-here = path.abspath(path.dirname(__file__))
-
-# Get the long description from the README file
-with open(path.join(here, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
 
 VERSION = (0, 0, 6)
 
@@ -14,18 +7,21 @@ setup(
     name='progressist',
     version=".".join(map(str, VERSION)),
     description='Minimalist and pythonic progress bar',
-    long_description=long_description,
+    long_description=Path("README.md").read_text(),
+    long_description_content_type='text/markdown',
     url="https://github.com/pyrates/progressist",
     author='Yohan Boniface',
     author_email="hi@yohanboniface.me",
     license='WTFPL',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
 
         'Intended Audience :: Developers',
 
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
     keywords='progress bar',
     packages=find_packages(exclude=['tests']),
