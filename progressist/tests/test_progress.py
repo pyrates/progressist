@@ -295,7 +295,7 @@ def test_throttle_without_total(bar, capsys):
     assert out == ''
     bar.update(done=42)
     out, err = capsys.readouterr()
-    assert out == '\rSpinner: \ 42'
+    assert out == '\rSpinner: \\ 42'
     bar.update(done=43)
     out, err = capsys.readouterr()
     assert out == ''
