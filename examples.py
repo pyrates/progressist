@@ -147,7 +147,7 @@ def example_download():
     class DownloadBar(ProgressBar):
         """Example of a resuming download, displaying human readable sizes."""
         template = ('Download |{animation}| {done:B}/{total:B} ({speed:B}/s)')
-        done_char = '⬛'
+        done_char = '█'
 
     bar = DownloadBar()
     for i in range(82944500, 197739688 + 165889, 165889):
@@ -158,9 +158,12 @@ def example_download():
 if __name__ == '__main__':
 
     if len(sys.argv) == 2:
-        idx = REGISTRY.index(sys.argv[1])
-        if idx > -1:
-            REGISTRY[idx]()
+        for func in REGISTRY:
+            if func.__name__ == sys.argv[1]:
+                func()
+                break
+        else:
+            print('No func found with name', sys.argv[1])
     else:
         for func in REGISTRY:
             func()
