@@ -398,3 +398,12 @@ def test_next(bar, capsys):
     next(bar)
     out, err = capsys.readouterr()
     assert out == '\rBar: ==============                         38/100'
+
+
+def test_on_urlretrieve(bar, capsys, monkeypatch):
+    bar.on_urlretrieve(8, 8192, 70486)
+    out, err = capsys.readouterr()
+    assert out == "\rBar: ==============================    65536/70486"
+    bar.on_urlretrieve(9, 8192, 70486)
+    out, err = capsys.readouterr()
+    assert out == "\rBar: ================================= 70486/70486\n"

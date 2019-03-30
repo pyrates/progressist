@@ -77,6 +77,13 @@ Or the target total may change during process?
 
     bar.update(total=newcomputedtotal)
 
+To use as [urlretrieve](https://docs.python.org/3/library/urllib.request.html#urllib.request.urlretrieve)
+callback:
+
+    bar = ProgressBar(template="Download |{animation}| {done:B}/{total:B}")
+    urllib.request.urlretrieve(myurl, mydest, reporthook=bar.on_urlretrieve)
+
+
 See [examples](https://github.com/pyrates/progressist/blob/master/examples.py) for inspiration.
 
 To run examples, when git cloned the repository, simply run:
