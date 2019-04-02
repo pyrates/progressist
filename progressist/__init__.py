@@ -201,6 +201,16 @@ class ProgressBar:
             # Spinner without total.
             self.finish()
 
+    def on_urlretrieve(self, blocknum, bs, size):
+        """Callback to use with urllib.request.urlretrieve"""
+        done = blocknum * bs
+        total = size if size > -1 else 0
+        if total:
+            # We don't have the real amount of bytes read, but the theorical
+            # amount, so on the last chunk the real amount may be smaller.
+            done = min(done, total)
+        self.update(done=done, total=total)
+
 
 # Manage sane default formats while keeping the original type to allow any
 # built-in formatting syntax.
