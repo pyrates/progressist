@@ -1,7 +1,7 @@
 from pathlib import Path
 from setuptools import setup, find_packages
 
-VERSION = (0, 0, 6)
+VERSION = (0, 1, 0)
 
 setup(
     name='progressist',
