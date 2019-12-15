@@ -1,5 +1,5 @@
 develop:
-	python setup.py develop
+	pip install -e .[test]
 dist:
 	python setup.py sdist bdist_wheel
 upload:
