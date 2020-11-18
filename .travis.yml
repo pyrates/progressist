@@ -15,6 +15,9 @@ after_success:
 - coveralls
 notifications:
   email: false
+branches:
+  only:
+    - master
 deploy:
   provider: pypi
   user: ybon
