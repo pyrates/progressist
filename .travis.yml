@@ -2,12 +2,12 @@ language: python
 sudo: required
 dist: xenial
 python:
-- 3.5
 - 3.6
 - 3.7
 - 3.8
+- 3.9
 install:
-- pip install .
+- pip install .[test]
 - pip install pytest-cov
 - pip install coveralls
 script: py.test --cov=progressist
@@ -15,6 +15,9 @@ after_success:
 - coveralls
 notifications:
   email: false
+branches:
+  only:
+    - master
 deploy:
   provider: pypi
   user: ybon
